@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login / Sign Up</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .container { background: #fff; padding: 20px 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 300px; }
+    h2 { text-align: center; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; font-weight: bold; margin-bottom: 5px; }
+    input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+    button { width: 100%; padding: 10px; background: black; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #333; }
+    p { text-align: center; margin-top: 10px; }
+    a { color: blue; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2 id="title">Login</h2>
+
+  <div class="form-group" id="email-group" style="display: none;">
+    <label>Email</label>
+    <input type="email" id="email" placeholder="Enter email">
+  </div>
+
+  <div class="form-group">
+    <label>Username</label>
+    <input type="text" id="username" placeholder="Enter username">
+  </div>
+
+  <div class="form-group">
+    <label>Password</label>
+    <input type="password" id="password" placeholder="Enter password">
+  </div>
+
+  <button id="submitBtn">Login</button>
+
+  <p id="signupLink">Don't have an account? <a>Sign Up</a></p>
+  <p id="loginLink" style="display:none;">Already have an account? <a>Login</a></p>
+</div>
+
+<script>
+const title = document.getElementById("title");
+const emailGroup = document.getElementById("email-group");
+const submitBtn = document.getElementById("submitBtn");
+const signupLink = document.getElementById("signupLink");
+const loginLink = document.getElementById("loginLink");
+
+signupLink.addEventListener("click", () => {
+  title.textContent = "Sign Up";
+  emailGroup.style.display = "block";
+  submitBtn.textContent = "Sign Up";
+  signupLink.style.display = "none";
+  loginLink.style.display = "block";
+});
+
+loginLink.addEventListener("click", () => {
+  title.textContent = "Login";
+  emailGroup.style.display = "none";
+  submitBtn.textContent = "Login";
+  loginLink.style.display = "none";
+  signupLink.style.display = "block";
+});
+
+submitBtn.addEventListener("click", async () => {
+  console.log("click")
+  const email = document.getElementById("email").value.trim();
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  const isSignup = emailGroup.style.display !== "none";
+
+  if (!username || !password || (isSignup && !email)) {
+    alert("Please fill in all required fields.");
+    return;
+  }
+
+  const endpoint = isSignup
+    ? "http://localhost:5001/api/signup"
+    : "http://localhost:5001/api/login";
+
+  try {
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username,
+        password,
+        ...(isSignup && { email })
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || "An error occurred.");
+      return;
+    }
+
+    // Store user for later use (contact page)
+    if (data.user) {
+      localStorage.setItem("triotrails_user", JSON.stringify(data.user));
+    } else if (isSignup) {
+      localStorage.setItem("triotrails_user", JSON.stringify({ username, email }));
+    }
+
+    alert(data.message);
+    window.location.href = "dashboard.html";
+  } catch (err) {
+    console.error(err);
+    alert("Server error. Please try again.");
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrioTrails - Rural India</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .rural-hero {
+      background: url('https://images.pexels.com/photos/164336/pexels-photo-164336.jpeg?auto=compress&cs=tinysrgb&w=1600') center/cover no-repeat;
+      height: 300px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-shadow: 1px 1px 4px #000;
+    }
+    .highlight-card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 20px;
+      background-color: #f8f9fa;
+      margin-bottom: 20px;
+    }
+    .highlight-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    .filter-buttons {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .filter-buttons button {
+      margin: 5px;
+    }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="dashboard.html">Home</a>
+      <span class="navbar-text text-white">Explore Rural India</span>
+    </div>
+  </nav>
+
+  <div class="rural-hero">
+    <h1>Rural Adventures in India</h1>
+  </div>
+
+  <div class="container py-5">
+    <h2 class="text-center mb-4">Hidden Gems of Rural India</h2>
+
+    <div class="filter-buttons">
+      <button class="btn btn-outline-primary filter-btn" data-filter="all">All</button>
+      <button class="btn btn-outline-primary filter-btn" data-filter="north">North</button>
+      <button class="btn btn-outline-primary filter-btn" data-filter="south">South</button>
+      <button class="btn btn-outline-primary filter-btn" data-filter="east">East</button>
+      <button class="btn btn-outline-primary filter-btn" data-filter="west">West</button>
+    </div>
+
+    <div class="row" id="cardContainer">
+      <!-- Cards inserted dynamically -->
+    </div>
+
+    <div class="text-center mt-4">
+      <a href="dashboard.html" class="btn btn-secondary me-2">Back to Dashboard</a>
+    </div>
+  </div>
+
+  <footer class="bg-dark text-white text-center p-3">
+    &copy; 2024 TrioTrails. All rights reserved.
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const places = [
+      { region: 'north', name: 'Spiti Valley, Himachal', img: 'https://images.pexels.com/photos/1114896/pexels-photo-1114896.jpeg', desc: 'Rustic Himalayan villages, Buddhist monasteries, and stunning landscapes await your journey.', price: '₹12499' },
+      { region: 'south', name: 'Kumarakom, Kerala', img: 'https://www.keralatourism.org/images/enchanting_kerala/large/the_captivating_water_world_of_kumarakom20140226165302_480_1.jpg', desc: 'Peaceful backwaters, village life, and houseboat stays.', price: '₹8999' },
+      { region: 'east', name: 'Mawlynnong, Meghalaya', img: 'https://www.meghalayatourism.in/wp-content/uploads/2020/07/Kudengrim-1-1536x1024.jpg', desc: 'Known as the cleanest village in Asia, enjoy eco-tourism in Meghalaya.', price: '₹10499' },
+      { region: 'west', name: 'Hodka Village, Gujarat', img: 'https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg', desc: 'Traditional crafts, folk music, and rural hospitality.', price: '₹7499' },
+      { region: 'south', name: 'Araku Valley, Andhra Pradesh', img: 'https://www.trawell.in/admin/images/upload/249844422AnantagiriFalls_Main.jpg', desc: 'Surrounded by coffee plantations and tribal culture.', price: '₹8199'},
+      { region: 'east', name: 'Chilika Lake Villages, Odisha', img: 'https://images.pexels.com/photos/247478/pexels-photo-247478.jpeg', desc: 'Witness flamingos, fishing communities, and boat rides.', price: '₹9699' },
+      { region: 'east', name: 'Khonoma, Nagaland', img: 'https://images.pexels.com/photos/460672/pexels-photo-460672.jpeg', desc: 'India’s first green village, known for eco-tourism.', price: '₹8899' },
+      { region: 'south', name: 'Pochampally, Telangana', img: 'https://images.pexels.com/photos/1107717/pexels-photo-1107717.jpeg', desc: 'Famous for Ikat textiles and vibrant village traditions.', price: '₹6799' },
+      { region: 'south', name: 'Banavasi, Karnataka', img: 'https://static2.tripoto.com/media/filter/nl/img/20582/TripDocument/pic_2_4.jpg', desc: 'Old town with temples, festivals, and forests.', price: '₹7599' },
+      { region: 'north', name: 'Almora, Uttarakhand', img: 'https://static2.tripoto.com/media/transfer/img/OgData/1465630202_kosi_river_valley_near_almora_uttarakhand_india.jpg', desc: 'Serene village in Kumaon hills with heritage trails.', price: '₹9999' },
+      { region: 'west', name: 'Jawhar, Maharashtra', img: 'https://th.bing.com/th/id/R.27a190ebea50aaedd30a8f26c411b61c?rik=ZLbJZ%2fuk6f2KDw&riu=http%3a%2f%2fmaharashtraplanet.com%2fwp-content%2fuploads%2f2013%2f10%2fhanuman-point-jawhar.jpg&ehk=SkVpJrqjAlU7teKJXLqheGnGrLbFztzVs5kmDU8KUJg%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1', desc: 'Hill station known for tribal culture and art.', price: '₹6999' }
+    ];
+
+    const container = document.getElementById('cardContainer');
+    places.forEach(p => {
+      const col = document.createElement('div');
+      col.className = `col-md-4 filter-card ${p.region}`;
+      col.innerHTML = `
+        <div class="highlight-card">
+          <img src="${p.img}" alt="${p.name}">
+          <h4>${p.name}</h4>
+          <p>${p.desc}</p>
+          <p><strong>Starting at: ${p.price}</strong></p>
+          <a href="booking.html?place=${encodeURIComponent(p.name)}" class="btn btn-primary">Book Now</a>
+        </div>
+      `;
+      container.appendChild(col);
+    });
+
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.filter-card');
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const filter = button.getAttribute('data-filter');
+        document.querySelectorAll('.filter-card').forEach(card => {
+          if (filter === 'all' || card.classList.contains(filter)) {
+            card.classList.remove('hidden');
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

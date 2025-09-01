@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TrioTrails - Login</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css">
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+    .bg-layer {
+      position: fixed;
+      top: 0; left: 0;
+      height: 100%; width: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    .bg-layer.visible { opacity: 1; }
+    .card {
+      max-width: 400px;
+      margin: auto;
+      padding: 25px;
+      background-color: rgba(255, 255, 255, 0.7);
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(6px);
+    }
+    .text-center a { cursor: pointer; }
+    #passwordError {
+      color: red;
+      font-size: 0.9rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="bg1" class="bg-layer visible"></div>
+  <div id="bg2" class="bg-layer"></div>
+
+  <section class="vh-100 d-flex align-items-center justify-content-center" id="authPage">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card p-4">
+            <h3 class="text-center mb-3" id="authTitle">Login to TrioTrails</h3>
+            <form id="authForm">
+              <input type="text" id="username" class="form-control mb-3" placeholder="Username" required>
+
+              <!-- Password with toggle -->
+              <div class="input-group mb-2">
+  <input type="password" id="password" class="form-control" placeholder="Password" required>
+  <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+    <i class="bi bi-eye"></i>
+  </button>
+</div>
+
+              <small id="passwordError" class="text-danger d-none">Invalid password format.</small>
+
+              <!-- Email field (only shown during signup) -->
+              <input type="email" id="signupEmail" class="form-control mb-3" placeholder="Email" style="display:none;">
+
+              <!-- reCAPTCHA -->
+              <div class="mb-3" id="captchaContainer">
+                <div class="g-recaptcha" data-sitekey="6Lc7coYrAAAAAF2P4dJCLVlKBnrW3k7A-qG17TY8"></div>
+              </div>
+
+              <button class="btn btn-primary w-100" id="authButton" type="submit">Login</button>
+            </form>
+
+            <div class="text-center mt-3">
+              <a onclick="toggleAuthMode();">Don't have an account? Sign Up</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Google reCAPTCHA -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+  <script>
+    const bgImages = [
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1533055640609-24b498cdf79f?auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80"
+    ];
+    let current = 0;
+    let isBg1Visible = true;
+    const bg1 = document.getElementById('bg1');
+    const bg2 = document.getElementById('bg2');
+
+    function preloadImage(url, callback) {
+      const img = new Image();
+      img.src = url;
+      img.onload = callback;
+    }
+
+    function switchBackground() {
+      const nextIndex = (current + 1) % bgImages.length;
+      const nextImage = bgImages[nextIndex];
+      const visibleBg = isBg1Visible ? bg1 : bg2;
+      const hiddenBg = isBg1Visible ? bg2 : bg1;
+
+      preloadImage(nextImage, () => {
+        hiddenBg.style.backgroundImage = `url('${nextImage}')`;
+        hiddenBg.classList.add('visible');
+        visibleBg.classList.remove('visible');
+        isBg1Visible = !isBg1Visible;
+        current = nextIndex;
+      });
+    }
+
+    window.onload = () => {
+      bg1.style.backgroundImage = `url('${bgImages[0]}')`;
+      setInterval(switchBackground, 4000);
+    };
+
+    function toggleAuthMode() {
+      const title = document.getElementById('authTitle');
+      const button = document.getElementById('authButton');
+      const emailInput = document.getElementById('signupEmail');
+      const link = event.target;
+
+      if (title.innerText === 'Login to TrioTrails') {
+        title.innerText = 'Sign Up for TrioTrails';
+        button.innerText = 'Sign Up';
+        emailInput.style.display = 'block';
+        link.innerText = 'Already have an account? Login';
+      } else {
+        title.innerText = 'Login to TrioTrails';
+        button.innerText = 'Login';
+        emailInput.style.display = 'none';
+        link.innerText = "Don't have an account? Sign Up";
+      }
+    }
+
+    // Toggle show/hide password
+    document.getElementById("togglePassword").addEventListener("click", function () {
+  const passwordInput = document.getElementById("password");
+  const icon = this.querySelector("i");
+
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    icon.classList.remove("bi-eye");
+    icon.classList.add("bi-eye-slash");
+  } else {
+    passwordInput.type = "password";
+    icon.classList.remove("bi-eye-slash");
+    icon.classList.add("bi-eye");
+  }
+});
+
+   
+
+    // Password validation rule
+    function isPasswordValid(password) {
+      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      return regex.test(password);
+    }
+
+    // Submit handler
+    document.getElementById("authForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const emailInput = document.getElementById('signupEmail');
+      const email = emailInput.value.trim();
+      const captchaResponse = grecaptcha.getResponse();
+      const passwordError = document.getElementById("passwordError");
+
+      if (!username || !password) {
+        alert("Username and Password are required.");
+        return;
+      }
+
+      if (emailInput.style.display !== "none" && (!email || !/^\S+@\S+\.\S+$/.test(email))) {
+        alert("Please enter a valid email address.");
+        return;
+      }
+
+      if (!isPasswordValid(password)) {
+        passwordError.style.display = "block";
+        return;
+      } else {
+        passwordError.style.display = "none";
+      }
+
+      if (captchaResponse.length === 0) {
+        alert("Please complete the reCAPTCHA.");
+        return;
+      }
+
+      // Redirect to dashboard
+      window.location.href = 'dashboardS.html';
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
