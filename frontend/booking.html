@@ -90,6 +90,32 @@
     </form>
   </div>
 
+  <!-- Booking Modal -->
+  <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <form id="bookingForm" class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="bookingModalLabel">Confirm Booking</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="destinationInput" name="destination">
+          <div class="mb-3">
+            <label for="nameInput" class="form-label">Your Name</label>
+            <input type="text" class="form-control" id="nameInput" name="name" required>
+          </div>
+          <div class="mb-3">
+            <label for="emailInput" class="form-label">Your Email</label>
+            <input type="email" class="form-control" id="emailInput" name="email" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Confirm Booking</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
     // Get destination from URL
     const params = new URLSearchParams(window.location.search);
@@ -148,6 +174,40 @@
     document.getElementById("booking-form").addEventListener("submit", function(e) {
       e.preventDefault();
       alert("Booking confirmed! We'll contact you shortly.");
+    });
+
+    document.querySelectorAll('.book-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const destination = this.closest('.destination-card').querySelector('h5').textContent;
+        document.getElementById('destinationInput').value = destination;
+        var bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+        bookingModal.show();
+      });
+    });
+
+    document.getElementById('bookingForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const form = e.target;
+      fetch('http://localhost:5001/api/book', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name.value,
+          email: form.email.value,
+          destination: form.destination.value
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.message) {
+          alert('Booking confirmed! You will receive a confirmation email.');
+          window.location.reload();
+        } else {
+          alert(data.error || 'Booking failed.');
+        }
+      })
+      .catch(() => alert('Booking failed.'));
     });
   </script>
 </body>
