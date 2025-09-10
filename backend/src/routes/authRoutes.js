@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
 const nodemailer = require("nodemailer");
+const { sendMail } = require("../utils/mailer");
 
 // Build transporter. If no SMTP creds, fall back to Ethereal for testing.
 async function getMailTransporter() {
@@ -94,15 +95,11 @@ router.post("/contact", async (req, res) => {
              <p>— TrioTrails Team</p>`
     };
 
-    const transporter = await getMailTransporter();
-    const info = await transporter.sendMail(mailOptions);
-
-    // If using Ethereal, include preview URL to aid testing
-    const previewUrl = nodemailer.getTestMessageUrl(info);
+    const { info, previewUrl } = await sendMail(mailOptions);
     res.json({ message: "Email sent successfully", ...(previewUrl ? { previewUrl } : {}) });
   } catch (err) {
     console.error("Email send error:", err.message);
-    res.status(500).json({ message: "Failed to send email" });
+    res.status(500).json({ message: "Failed to send email", error: err.message });
   }
 });
 

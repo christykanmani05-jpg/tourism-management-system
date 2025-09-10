@@ -4,6 +4,7 @@ const path = require("path");
 const cors = require("cors");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
+const dashboardRoutes = require("./routes/dashboard");
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -38,6 +39,11 @@ app.get("/contact.html", (req, res) => {
 });
 
 // Routes
+
+console.log("Booking router loaded at /book");
+const bookingRouter = require("../booking.js");
+app.use("/book", bookingRouter);
 app.use("/api", authRoutes);
+app.use("/api", dashboardRoutes);
 
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));

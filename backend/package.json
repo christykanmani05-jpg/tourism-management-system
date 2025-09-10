@@ -6,7 +6,8 @@
   "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node src/server.js"
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
   },
   "author": "",
   "license": "ISC",
@@ -16,5 +17,8 @@
     "mongoose": "^8.17.1",
     "nodemailer": "^6.9.13",
     "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }

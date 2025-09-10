@@ -28,4 +28,9 @@ router.post("/dashboard", createDashboardRecord);
 router.put("/dashboard/:id", updateDashboardRecord);
 router.delete("/dashboard/:id", deleteDashboardRecord);
 
-module.exports = router;
+module.exports = {
+  getDashboardData,
+  createDashboardRecord,
+  updateDashboardRecord,
+  deleteDashboardRecord
+};
