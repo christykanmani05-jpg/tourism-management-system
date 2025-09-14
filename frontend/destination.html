@@ -110,24 +110,8 @@
 </head>
 <body>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg fixed-top">
-    <div class="container">
-      <a class="navbar-brand" href="home.html">TrioTrails</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="dashboard.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link active" href="destination.html">Destinations</a></li>
-          <li class="nav-item"><a class="nav-link" href="packages.html">Packages</a></li>
-          <li class="nav-item"><a class="nav-link" href="rural.html">Rural India</a></li>
-          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <!-- Navbar placeholder -->
+  <div id="navbar-host"></div>
 
   <!-- Hero Header -->
   <header>
@@ -165,72 +149,86 @@
   <!-- Destinations Grid -->
   <section class="py-5">
     <div class="container">
-      <div class="row g-4">
-        <!-- Example Card with Book Button -->
-        <div class="col-md-4">
-          <div class="destination-card">
-            <img src="https://images.unsplash.com/photo-1518684079-3c830dcef090" alt="Swiss Alps">
-            <div class="card-body">
-              <h5>Swiss Alps</h5>
-              <p>Breathtaking peaks and alpine trails for hikers and adventure lovers.</p>
-              <a href="booking.html?destination=Swiss Alps" class="book-btn">Book Now</a>
-
+      <div class="row g-4" id="destinations-container">
+        <div class="col-12 text-center">
+          <div class="loading">Loading destinations...</div>
             </div>
           </div>
         </div>
-        <!-- Repeat this structure for each destination -->
-        <div class="col-md-4"><div class="destination-card"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e" alt="Maldives"><div class="card-body"><h5>Maldives</h5><p>Pristine beaches, luxury resorts, and water sports paradise.</p><a href="#" class="book-btn">Book Now</a></div></div></div>
-        <div class="col-md-4"><div class="destination-card"><img src="https://th.bing.com/th/id/R.04a14a4f4f85877221dd09f4239c2573?rik=7p2EV1rHVEUuVg&riu=http%3a%2f%2fwww.indiadivine.org%2fwp-content%2fuploads%2f2015%2f08%2fmadurai-03.jpg&ehk=%2bNzuW9ePG6n2AxhCrclPSl4HoPdFabtGACxh1aLjOKM%3d&risl=&pid=ImgRaw&r=0" alt="Amazon"><div class="card-body"><h5>Amazon Rainforest</h5><p>Rich biodiversity, river cruises, and thrilling jungle treks.</p><a href="#" class="book-btn">Book Now</a></div></div></div>
-        <div class="col-md-4"><div class="destination-card"><img src="https://images.unsplash.com/photo-1533035354964-2f1caca4d955" alt="Rajasthan"><div class="card-body"><h5>Rajasthan</h5><p>Experience royal palaces, deserts, and vibrant culture of India.</p><a href="#" class="book-btn">Book Now</a></div></div></div>
-        <div class="col-md-4"><div class="destination-card"><img src="https://images.unsplash.com/photo-1493558103817-58b2924bce98" alt="Goa"><div class="card-body"><h5>Goa</h5><p>Golden beaches, nightlife, Portuguese heritage, and tropical vibes.</p><a href="#" class="book-btn">Book Now</a></div></div></div>
-        <div class="col-md-4"><div class="destination-card"><img src="https://images.unsplash.com/photo-1473625247510-8ceb1760943f" alt="Himalayas"><div class="card-body"><h5>Himalayas</h5><p>Snow-clad peaks, treks, and serene landscapes for peace seekers.</p><a href="#" class="book-btn">Book Now</a></div></div></div>
-        <!-- Additional 10 Cards -->
-        <div class="col-md-4"><div class="destination-card"><img src="https://images.unsplash.com/photo-1505761671935-60b3a7427bad" alt="Bali"><div class="card-body"><h5>Bali</h5><p>Tropical beaches, temples, and vibrant nightlife on Indonesia's island paradise.</p><a href="booking.html?destination=Bali" class="book-btn">Book Now</a></div></div></div>
-        <div class="col-md-4"><div class="destination-card"><img src="https://images.unsplash.com/photo-1483683804023-6ccdb62f86ef" alt="Paris"><div class="card-body"><h5>Paris</h5><p>Romantic streets, iconic Eiffel Tower, museums, and rich culture in France.</p><a href="#" class="book-btn">Book Now</a></div></div></div>
-        <div class="col-md-4"><div class="destination-card"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee" alt="New York"><div class="card-body"><h5>New York</h5><p>Skyscrapers, Central Park, Broadway shows, and cultural diversity.</p><a href="#" class="book-btn">Book Now</a></div></div></div>
-        <div class="col-md-4"><div class="destination-card"><img src="https://images.unsplash.com/photo-1519821172141-b5d8c74f2c33" alt="Dubai"><div class="card-body"><h5>Dubai</h5><p>Modern skyline, desert safaris, luxury shopping, and world-class entertainment.</p><a href="#" class="book-btn">Book Now</a></div></div></div>
-        <div class="col-md-4"><div class="destination-card"><img src="https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0" alt="Santorini"><div class="card-body"><h5>Santorini</h5><p>Blue-domed churches, whitewashed houses, and mesmerizing sunsets in Greece.</p><a href="#" class="book-btn">Book Now</a></div></div></div>
-        <div class="col-md-4"><div class="destination-card"><img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70" alt="Tokyo"><div class="card-body"><h5>Tokyo</h5><p>Blend of tradition and technology, neon streets, and exquisite Japanese cuisine.</p><a href="#" class="book-btn">Book Now</a></div></div></div>
-        <div class="col-md-4"><div class="destination-card"><img src="https://images.unsplash.com/photo-1551334787-21e6bd3ab135" alt="Sydney"><div class="card-body"><h5>Sydney</h5><p>Famous Opera House, harbour views, beaches, and coastal adventures in Australia.</p><a href="#" class="book-btn">Book Now</a></div></div></div>
-        <div class="col-md-4"><div class="destination-card"><img src="https://images.unsplash.com/photo-1505761671935-60b3a7427bad" alt="Kerala"><div class="card-body"><h5>Kerala</h5><p>Backwaters, lush greenery, beaches, and cultural heritage in God’s Own Country.</p><a href="#" class="book-btn">Book Now</a></div></div></div>
-        <div class="col-md-4"><div class="destination-card"><img src="https://images.unsplash.com/photo-1473625247510-8ceb1760943f" alt="Iceland"><div class="card-body"><h5>Iceland</h5><p>Land of fire and ice with glaciers, volcanoes, geysers, and northern lights.</p><a href="#" class="book-btn">Book Now</a></div></div></div>
-        <div class="col-md-4"><div class="destination-card"><img src="https://images.unsplash.com/photo-1493558103817-58b2924bce98" alt="Kyoto"><div class="card-body"><h5>Kyoto</h5><p>Historic temples, gardens, geisha culture, and beautiful seasonal landscapes in Japan.</p><a href="#" class="book-btn">Book Now</a></div></div></div>
-        <div class="col-md-4"><div class="destination-card"><img src="https://images.unsplash.com/photo-1493558103817-58b2924bce98" alt="Cape Town"><div class="card-body"><h5>Cape Town</h5><p>Beautiful coastlines, Table Mountain views, and vibrant culture.</p><a href="#" class="book-btn">Book Now</a></div></div></div>
-      </div>
-    </div>
-        <!-- Add other destinations as in your list -->
-      </div>
-    </div>
     <script>
-document.querySelector(".btn.btn-primary").addEventListener("click", function () {
+        let allDestinations = [];
+
+        async function loadDestinations() {
+            const container = document.getElementById('destinations-container');
+            container.innerHTML = '<div class="col-12 text-center"><div class="loading">Loading destinations...</div></div>';
+            
+            try {
+                const res = await fetch('/api/destinations');
+                allDestinations = await res.json();
+                
+                if (!Array.isArray(allDestinations)) {
+                    throw new Error('Unexpected response format');
+                }
+                
+                if (allDestinations.length === 0) {
+                    container.innerHTML = '<div class="col-12 text-center text-muted py-5">No destinations available.</div>';
+                    return;
+                }
+                
+                displayDestinations(allDestinations);
+            } catch (error) {
+                container.innerHTML = `<div class="col-12 text-center"><div class="error">Error loading destinations: ${error.message}</div></div>`;
+            }
+        }
+
+        function displayDestinations(destinations) {
+            const container = document.getElementById('destinations-container');
+            container.innerHTML = destinations.map(dest => `
+                <div class="col-md-4">
+                    <div class="destination-card">
+                        <img src="${dest.image}" alt="${dest.name}" onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
+                        <div class="card-body">
+                            <h5>${dest.name}</h5>
+                            <p>${dest.description}</p>
+                            <div class="mb-2">
+                                <small class="text-muted">${dest.region} • ${dest.type}</small>
+      </div>
+                            <div class="mb-2">
+                                <strong>${dest.price}</strong>
+    </div>
+                            <a href="booking.html?destination=${encodeURIComponent(dest.name)}" class="book-btn">Book Now</a>
+      </div>
+    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterDestinations() {
   const region = document.querySelectorAll("select")[0].value.toLowerCase();
   const type = document.querySelectorAll("select")[1].value.toLowerCase();
   const search = document.querySelector("input[type='text']").value.toLowerCase();
 
-  const cards = document.querySelectorAll(".destination-card");
-  cards.forEach(card => {
-    const title = card.querySelector("h5").textContent.toLowerCase();
-    const text = card.querySelector("p").textContent.toLowerCase();
+            let filtered = allDestinations.filter(dest => {
     let match = true;
 
-    // Example tags for demonstration; you should expand based on your data
     if (region !== "all regions") {
-      if (region === "asia" && !["rajasthan","goa","himalayas","ooty","bali","tokyo","dubai"].some(d => title.includes(d))) match = false;
-      if (region === "europe" && !["swiss","paris","rome","iceland","barcelona"].some(d => title.includes(d))) match = false;
-      if (region === "americas" && !["amazon","new york","machu picchu","patagonia","alaska"].some(d => title.includes(d))) match = false;
+                    match = match && dest.region.toLowerCase() === region;
     }
     if (type !== "all types") {
-      if (type === "mountains" && !["himalayas","swiss","ooty","iceland","patagonia","alaska"].some(d => title.includes(d))) match = false;
-      if (type === "beaches" && !["maldives","goa","bali","barcelona","dubai"].some(d => title.includes(d))) match = false;
-      if (type === "forest" && !["amazon","ooty"].some(d => title.includes(d))) match = false;
-    }
-    if (search && !(title.includes(search) || text.includes(search))) {
-      match = false;
-    }
+                    match = match && dest.type.toLowerCase() === type;
+                }
+                if (search) {
+                    match = match && (dest.name.toLowerCase().includes(search) || dest.description.toLowerCase().includes(search));
+                }
+                
+                return match;
+            });
 
-    card.parentElement.style.display = match ? "block" : "none";
-  });
-});
+            displayDestinations(filtered);
+        }
+
+        document.addEventListener('DOMContentLoaded', loadDestinations);
+        document.querySelector(".btn.btn-primary").addEventListener("click", filterDestinations);
 </script>
 
   </section>
@@ -240,6 +238,8 @@ document.querySelector(".btn.btn-primary").addEventListener("click", function ()
     &copy; 2025 TrioTrails. All rights reserved. | <a href="#">Privacy Policy</a>
   </footer>
 
+  <script src="/js/auth.js"></script>
+  <script src="/js/navbar.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

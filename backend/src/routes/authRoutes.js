@@ -32,7 +32,7 @@ async function getMailTransporter() {
 
 // Signup Route
 router.post("/signup", async (req, res) => {
-  const { username, password, email } = req.body;
+  const { username, password, email, profilePhoto } = req.body;
 
   try {
     const existingUser = await User.findOne({ username });
@@ -40,10 +40,24 @@ router.post("/signup", async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    const newUser = new User({ username, password, email });
+    const newUser = new User({ 
+      username, 
+      password, 
+      email, 
+      profilePhoto: profilePhoto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+      role: 'user' 
+    });
     await newUser.save();
 
-    res.json({ message: "Signup successful!", user: { username: newUser.username, email: newUser.email } });
+    res.json({ 
+      message: "Signup successful!", 
+      user: { 
+        username: newUser.username, 
+        email: newUser.email,
+        profilePhoto: newUser.profilePhoto,
+        role: newUser.role
+      } 
+    });
   } catch (err) {
     res.status(500).json({ message: "Server error" + err});
   }
@@ -60,7 +74,39 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid username or password" });
     }
 
-    res.json({ message: "Login successful!", user: { username: user.username, email: user.email } });
+    res.json({ 
+      message: "Login successful!", 
+      user: { 
+        username: user.username, 
+        email: user.email,
+        profilePhoto: user.profilePhoto,
+        role: user.role
+      } 
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Admin Login Route
+router.post("/admin/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const user = await User.findOne({ username, password, role: 'admin' });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid admin credentials" });
+    }
+
+    res.json({ 
+      message: "Admin login successful!", 
+      user: { 
+        username: user.username, 
+        email: user.email,
+        profilePhoto: user.profilePhoto,
+        role: user.role
+      } 
+    });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }

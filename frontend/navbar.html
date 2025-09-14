@@ -1,0 +1,35 @@
+<nav class="navbar navbar-expand-lg fixed-top" style="background: linear-gradient(90deg, #0057b8, #00aaff); box-shadow: 0 3px 8px rgba(0,0,0,0.15);">
+  <div class="container">
+    <a class="navbar-brand text-white" href="/dashboard.html#home">TrioTrails</a>
+    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link text-white" href="/dashboard.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="/destination.html">Destinations</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="/packages.html">Packages</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="/rural.html">Rural India</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="/guide.html">Add Guide</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="/guide-details.html">View Guides</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="/contact.html">Contact</a></li>
+        <li class="nav-item" id="admin-nav-item" style="display: none;"><a class="nav-link text-white" href="/admin.html">Admin</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle d-flex align-items-center text-white" href="#" data-bs-toggle="dropdown" id="profileDropdown">
+            <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" width="28" height="28" class="rounded-circle me-2" id="profileImage">
+            <span id="profileUsername">User</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="/dashboard.html">Dashboard</a></li>
+            <li><a class="dropdown-item" href="/guide.html">Add Guide</a></li>
+            <li><a class="dropdown-item" href="/guide-details.html">View Guides</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="#" onclick="logout()">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+

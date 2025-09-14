@@ -12,11 +12,7 @@
   </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-      <a class="navbar-brand" href="dashboard.html">TravelMate</a>
-    </div>
-  </nav>
+  <div id="navbar-host"></div>
 
   <div class="container mt-5">
     <h1 id="destination-title" class="mb-4"></h1>
@@ -116,6 +112,8 @@
     </div>
   </div>
 
+  <script src="/js/auth.js"></script>
+  <script src="/js/navbar.js"></script>
   <script>
     // Get destination from URL
     const params = new URLSearchParams(window.location.search);

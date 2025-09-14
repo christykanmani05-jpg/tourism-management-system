@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guide Details - TrioTrails</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; background: #f5f6fa; color: #333; }
+        .navbar { background: linear-gradient(90deg, #0057b8, #00aaff); box-shadow: 0 3px 8px rgba(0,0,0,0.15); }
+        .navbar .navbar-brand, .navbar .nav-link { color: #fff !important; }
+        .navbar .nav-link:hover { color: #ffe066 !important; }
+        .navbar-toggler { border: none; }
+        .navbar-toggler-icon { background-image: url('data:image/svg+xml;charset=utf8,%3Csvg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath stroke="white" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22"/%3E%3C/svg%3E'); }
+        .container { margin-top: 100px; }
+        .guide-card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .guide-card h5 { color: #0057b8; margin-bottom: 15px; }
+        .guide-info { margin-bottom: 10px; }
+        .guide-info strong { color: #333; }
+        .languages { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .language-tag { background: #e3f2fd; color: #1976d2; padding: 4px 12px; border-radius: 20px; font-size: 14px; }
+        .loading { text-align: center; padding: 40px; color: #666; }
+        .error { color: #d32f2f; text-align: center; padding: 20px; }
+        .add-guide-btn { margin-bottom: 30px; }
+    </style>
+</head>
+<body>
+    <div id="navbar-host"></div>
+    
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Guide Details</h1>
+            <a href="guide.html" class="btn btn-primary add-guide-btn">Add New Guide</a>
+        </div>
+        
+        <div id="guides-container">
+            <div class="loading">Loading guides...</div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/navbar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        async function loadGuides() {
+            const container = document.getElementById('guides-container');
+            container.innerHTML = '<div class="loading">Loading guides...</div>';
+            
+            try {
+                const res = await fetch('/api/guides');
+                const guides = await res.json();
+                
+                if (!Array.isArray(guides)) {
+                    throw new Error('Unexpected response format');
+                }
+                
+                if (guides.length === 0) {
+                    container.innerHTML = '<div class="text-center text-muted py-5">No guides found. <a href="guide.html">Add the first guide</a></div>';
+                    return;
+                }
+                
+                container.innerHTML = guides.map(guide => `
+                    <div class="guide-card">
+                        <h5>${guide.name} (@${guide.username})</h5>
+                        <div class="guide-info">
+                            <strong>Email:</strong> ${guide.email}
+                        </div>
+                        <div class="guide-info">
+                            <strong>Destination:</strong> ${guide.destination}
+                        </div>
+                        <div class="guide-info">
+                            <strong>Languages:</strong>
+                            <div class="languages">
+                                ${(guide.languages || []).map(lang => `<span class="language-tag">${lang}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="guide-info">
+                            <strong>Added:</strong> ${new Date(guide.createdAt).toLocaleDateString()}
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                container.innerHTML = `<div class="error">Error loading guides: ${error.message}</div>`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadGuides);
+    </script>
+</body>
+</html>
