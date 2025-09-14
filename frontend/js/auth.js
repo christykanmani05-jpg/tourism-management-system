@@ -50,7 +50,10 @@ function updateProfileInNavbar() {
       const adminNavItem = document.getElementById('admin-nav-item');
       
       if (profileImage) {
-        profileImage.src = user.profilePhoto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+        const imageSrc = user.profilePhoto && user.profilePhoto.startsWith('/uploads/') 
+          ? `http://localhost:5001${user.profilePhoto}` 
+          : (user.profilePhoto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png');
+        profileImage.src = imageSrc;
       }
       if (profileUsername) {
         profileUsername.textContent = user.username || 'User';

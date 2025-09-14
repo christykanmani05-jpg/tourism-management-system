@@ -49,6 +49,16 @@
       transition: border-color 0.3s ease;
       box-sizing: border-box;
     }
+    input[type="file"] {
+      padding: 8px 12px;
+      background: #f8f9fa;
+      border: 2px dashed #e1e5e9;
+      cursor: pointer;
+    }
+    input[type="file"]:hover {
+      border-color: #667eea;
+      background: #f0f2ff;
+    }
     input:focus {
       outline: none;
       border-color: #667eea;
@@ -106,8 +116,12 @@
   </div>
 
   <div class="form-group" id="profile-photo-group" style="display: none;">
-    <label>Profile Photo URL (Optional)</label>
-    <input type="url" id="profilePhoto" placeholder="https://example.com/photo.jpg">
+    <label>Profile Photo (Optional)</label>
+    <input type="file" id="profilePhoto" accept="image/*" class="form-control">
+    <small class="text-muted">Max size: 5MB. Supported formats: JPG, PNG, GIF</small>
+    <div id="imagePreview" style="margin-top: 10px; display: none;">
+      <img id="previewImg" style="max-width: 100px; max-height: 100px; border-radius: 50%; border: 2px solid #e1e5e9;">
+    </div>
   </div>
 
   <button id="submitBtn">Login</button>
@@ -128,6 +142,24 @@ const signupLink = document.getElementById("signupLink");
 const loginLink = document.getElementById("loginLink");
 
 const profilePhotoGroup = document.getElementById("profile-photo-group");
+const profilePhotoInput = document.getElementById("profilePhoto");
+const imagePreview = document.getElementById("imagePreview");
+const previewImg = document.getElementById("previewImg");
+
+// Handle image preview
+profilePhotoInput.addEventListener("change", function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      previewImg.src = e.target.result;
+      imagePreview.style.display = "block";
+    };
+    reader.readAsDataURL(file);
+  } else {
+    imagePreview.style.display = "none";
+  }
+});
 
 signupLink.addEventListener("click", () => {
   title.textContent = "Sign Up";
@@ -142,6 +174,8 @@ loginLink.addEventListener("click", () => {
   title.textContent = "Login";
   emailGroup.style.display = "none";
   profilePhotoGroup.style.display = "none";
+  imagePreview.style.display = "none";
+  profilePhotoInput.value = "";
   submitBtn.textContent = "Login";
   loginLink.style.display = "none";
   signupLink.style.display = "block";
@@ -152,7 +186,7 @@ submitBtn.addEventListener("click", async () => {
   const email = document.getElementById("email").value.trim();
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
-  const profilePhoto = document.getElementById("profilePhoto").value.trim();
+  const profilePhotoFile = document.getElementById("profilePhoto").files[0];
 
   const isSignup = emailGroup.style.display !== "none";
 
@@ -166,15 +200,33 @@ submitBtn.addEventListener("click", async () => {
     : "http://localhost:5001/api/login";
 
   try {
-    const res = await fetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username,
-        password,
-        ...(isSignup && { email })
-      })
-    });
+    let res;
+    
+    if (isSignup) {
+      // For signup, use FormData to handle file upload
+      const formData = new FormData();
+      formData.append('username', username);
+      formData.append('password', password);
+      formData.append('email', email);
+      if (profilePhotoFile) {
+        formData.append('profilePhoto', profilePhotoFile);
+      }
+
+      res = await fetch(endpoint, {
+        method: "POST",
+        body: formData
+      });
+    } else {
+      // For login, use JSON
+      res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username,
+          password
+        })
+      });
+    }
 
     const data = await res.json();
 
@@ -187,7 +239,7 @@ submitBtn.addEventListener("click", async () => {
     const userProfile = {
       username,
       email: isSignup ? email : (data.user?.email || ''),
-      profilePhoto: profilePhoto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+      profilePhoto: data.user?.profilePhoto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
       role: data.user?.role || 'user'
     };
     

@@ -22,7 +22,12 @@ app.use(express.json());
 const frontendDir = path.resolve(__dirname, "../../frontend");
 app.use(express.static(frontendDir));
 app.use('/js', express.static(path.join(frontendDir, 'js')));
+
+// Serve uploaded files
+const uploadsDir = path.resolve(__dirname, "../uploads");
+app.use('/uploads', express.static(uploadsDir));
 console.log("Serving frontend from:", frontendDir);
+console.log("Serving uploads from:", uploadsDir);
 
 // Health check
 app.get("/api/health", (req, res) => {
