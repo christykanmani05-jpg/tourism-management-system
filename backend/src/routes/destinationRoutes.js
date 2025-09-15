@@ -110,3 +110,5 @@ router.patch("/admin/destinations/:id/toggle", async (req, res) => {
 
 module.exports = router;
 
+
+
