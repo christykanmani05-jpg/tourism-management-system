@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
 const nodemailer = require("nodemailer");
+const ContactMessage = require("../models/ContactMessage");
 const { sendMail } = require("../utils/mailer");
 const multer = require("multer");
 const path = require("path");
@@ -190,10 +191,55 @@ router.post("/contact", async (req, res) => {
     };
 
     const { info, previewUrl } = await sendMail(mailOptions);
-    res.json({ message: "Email sent successfully", ...(previewUrl ? { previewUrl } : {}) });
+
+    // Persist contact message for admin management
+    await ContactMessage.create({ name: name || user.username, email, message });
+
+    res.json({ message: "Message received and email sent successfully", ...(previewUrl ? { previewUrl } : {}) });
   } catch (err) {
     console.error("Email send error:", err.message);
     res.status(500).json({ message: "Failed to send email", error: err.message });
+  }
+});
+
+// Admin: Contact message management
+// List messages
+router.get("/admin/contact-messages", async (req, res) => {
+  try {
+    const { status } = req.query;
+    const filter = status ? { status } : {};
+    const messages = await ContactMessage.find(filter).sort({ createdAt: -1 });
+    res.json(messages);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+// Update message status
+router.patch("/admin/contact-messages/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    if (!status || !["new", "in_progress", "resolved"].includes(status)) {
+      return res.status(400).json({ message: "Invalid status" });
+    }
+    const updated = await ContactMessage.findByIdAndUpdate(id, { status }, { new: true });
+    if (!updated) return res.status(404).json({ message: "Message not found" });
+    res.json({ message: "Status updated", item: updated });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+// Delete message
+router.delete("/admin/contact-messages/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = await ContactMessage.findByIdAndDelete(id);
+    if (!deleted) return res.status(404).json({ message: "Message not found" });
+    res.json({ message: "Message deleted" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 });
 
