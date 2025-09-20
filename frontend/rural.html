@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TrioTrails - Rural India</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     body { font-family: Arial, sans-serif; }
     .rural-hero {
@@ -38,17 +39,311 @@
       margin: 5px;
     }
     .hidden { display: none !important; }
+    
+    /* Navbar Styles */
+    .professional-navbar {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.75rem 0;
+      transition: all 0.3s ease;
+    }
+
+    .professional-navbar .navbar-brand {
+      color: #ffffff !important;
+      font-weight: 700;
+      font-size: 1.5rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .professional-navbar .navbar-brand:hover {
+      color: #f8f9fa !important;
+      transform: translateY(-1px);
+    }
+
+    .brand-icon {
+      display: flex;
+      align-items: center;
+      color: #ffffff;
+    }
+
+    .brand-text {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      letter-spacing: -0.5px;
+    }
+
+    .professional-navbar .nav-link {
+      color: rgba(255, 255, 255, 0.9) !important;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 0.75rem 1rem !important;
+      margin: 0 0.25rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      position: relative;
+      text-decoration: none;
+    }
+
+    .professional-navbar .nav-link:hover {
+      color: #ffffff !important;
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .professional-navbar .nav-link.active {
+      color: #ffffff !important;
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .professional-navbar .navbar-toggler {
+      border: none;
+      padding: 0.25rem 0.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+    }
+
+    .professional-navbar .navbar-toggler:focus {
+      box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
+    }
+
+    .professional-navbar .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.9%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    .profile-dropdown {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 0.5rem 1rem !important;
+      margin-left: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .profile-dropdown:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .profile-avatar img {
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .profile-dropdown:hover .profile-avatar img {
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+
+    .profile-name {
+      font-weight: 500;
+      color: #ffffff;
+    }
+
+    .profile-menu {
+      border: none;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      border-radius: 12px;
+      padding: 0.5rem 0;
+      margin-top: 0.5rem;
+      min-width: 280px;
+    }
+
+    .profile-menu .dropdown-header {
+      padding: 1rem 1.5rem 0.5rem;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-radius: 12px 12px 0 0;
+      margin: -0.5rem -0.5rem 0.5rem -0.5rem;
+    }
+
+    .profile-menu .dropdown-item {
+      padding: 0.75rem 1.5rem;
+      font-weight: 500;
+      color: #495057;
+      transition: all 0.2s ease;
+      border: none;
+    }
+
+    .profile-menu .dropdown-item:hover {
+      background-color: #f8f9fa;
+      color: #1e3c72;
+      transform: translateX(4px);
+    }
+
+    .profile-menu .dropdown-item i {
+      width: 16px;
+      text-align: center;
+    }
+
+    .dropdown-menu {
+      border: none;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      border-radius: 12px;
+      padding: 0.5rem 0;
+      margin-top: 0.5rem;
+    }
+
+    .dropdown-item {
+      padding: 0.75rem 1.5rem;
+      font-weight: 500;
+      color: #495057;
+      transition: all 0.2s ease;
+    }
+
+    .dropdown-item:hover {
+      background-color: #f8f9fa;
+      color: #1e3c72;
+      transform: translateX(4px);
+    }
+
+    .dropdown-item i {
+      width: 16px;
+      text-align: center;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 991.98px) {
+      .professional-navbar .navbar-nav {
+        margin: 1rem 0;
+      }
+      
+      .professional-navbar .nav-link {
+        margin: 0.25rem 0;
+        padding: 0.75rem 1rem !important;
+      }
+      
+      .profile-dropdown {
+        margin-left: 0;
+        margin-top: 0.5rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .professional-navbar .container-fluid {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      
+      .brand-text {
+        font-size: 1.25rem;
+      }
+    }
   </style>
 </head>
 <body>
-  <nav class="navbar navbar-dark bg-dark">
-    <div class="container">
-      <a class="navbar-brand" href="dashboard.html">Home</a>
-      <span class="navbar-text text-white">Explore Rural India</span>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top professional-navbar">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand d-flex align-items-center" href="/dashboard.html#home">
+        <div class="brand-icon me-2">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="brand-text">TrioTrails</span>
+      </a>
+      
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard.html">
+              <i class="fas fa-home me-1"></i>Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/destination.html">
+              <i class="fas fa-map-marker-alt me-1"></i>Destinations
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/packages.html">
+              <i class="fas fa-suitcase me-1"></i>Packages
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/rural.html">
+              <i class="fas fa-tree me-1"></i>Rural India
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-users me-1"></i>Guides
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/guide.html"><i class="fas fa-plus me-2"></i>Add Guide</a></li>
+              <li><a class="dropdown-item" href="/guide-details.html"><i class="fas fa-list me-2"></i>View Guides</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact.html">
+              <i class="fas fa-envelope me-1"></i>Contact
+            </a>
+          </li>
+        </ul>
+        
+        <ul class="navbar-nav">
+          <!-- Admin Profile Dropdown -->
+          <li class="nav-item dropdown" id="admin-profile-dropdown" style="display: none;">
+            <a class="nav-link dropdown-toggle d-flex align-items-center profile-dropdown" href="#" data-bs-toggle="dropdown" id="profileDropdown">
+              <div class="profile-avatar me-2">
+                <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" width="32" height="32" class="rounded-circle" id="profileImage" alt="Profile">
+              </div>
+              <span class="profile-name" id="profileUsername">Admin</span>
+              <i class="fas fa-chevron-down ms-2"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end profile-menu">
+              <li class="dropdown-header">
+                <div class="d-flex align-items-center">
+                  <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" width="40" height="40" class="rounded-circle me-3" id="profileImageMenu">
+                  <div>
+                    <div class="fw-semibold" id="profileUsernameMenu">Admin</div>
+                    <small class="text-muted">Administrator</small>
+                  </div>
+                </div>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/admin.html"><i class="fas fa-tachometer-alt me-2"></i>Admin Panel</a></li>
+              <li><a class="dropdown-item" href="/guide.html"><i class="fas fa-plus me-2"></i>Add Guide</a></li>
+              <li><a class="dropdown-item" href="/guide-details.html"><i class="fas fa-list me-2"></i>View Guides</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+            </ul>
+          </li>
+          
+          <!-- Regular User Profile Dropdown -->
+          <li class="nav-item dropdown" id="user-profile-dropdown" style="display: none;">
+            <a class="nav-link dropdown-toggle d-flex align-items-center profile-dropdown" href="#" data-bs-toggle="dropdown" id="userProfileDropdown">
+              <div class="profile-avatar me-2">
+                <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" width="32" height="32" class="rounded-circle" id="userProfileImage" alt="Profile">
+              </div>
+              <span class="profile-name" id="userProfileName">User</span>
+              <i class="fas fa-chevron-down ms-2"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end profile-menu">
+              <li class="dropdown-header">
+                <div class="d-flex align-items-center">
+                  <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" width="40" height="40" class="rounded-circle me-3" id="userProfileImageMenu">
+                  <div>
+                    <div class="fw-semibold" id="userProfileNameMenu">User</div>
+                    <small class="text-muted">Tourism User</small>
+                  </div>
+                </div>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
     </div>
   </nav>
 
-  <div class="rural-hero">
+  <div class="rural-hero" style="margin-top: 80px;">
     <h1>Rural Adventures in India</h1>
   </div>
 
@@ -77,48 +372,78 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/navbar.js"></script>
   <script>
-    const places = [
-      { region: 'north', name: 'Spiti Valley', img: 'https://images.pexels.com/photos/1114896/pexels-photo-1114896.jpeg', desc: 'Rustic Himalayan villages, Buddhist monasteries, and stunning landscapes await your journey.', price: '₹12499' },
-      { region: 'south', name: 'Kumarakom', img: 'https://www.keralatourism.org/images/enchanting_kerala/large/the_captivating_water_world_of_kumarakom20140226165302_480_1.jpg', desc: 'Peaceful backwaters, village life, and houseboat stays.', price: '₹8999' },
-      { region: 'east', name: 'Mawlynnong', img: 'https://www.meghalayatourism.in/wp-content/uploads/2020/07/Kudengrim-1-1536x1024.jpg', desc: 'Known as the cleanest village in Asia, enjoy eco-tourism in Meghalaya.', price: '₹10499' },
-      { region: 'west', name: 'Hodka Village', img: 'https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg', desc: 'Traditional crafts, folk music, and rural hospitality.', price: '₹7499' },
-      { region: 'south', name: 'Araku Valley', img: 'https://www.trawell.in/admin/images/upload/249844422AnantagiriFalls_Main.jpg', desc: 'Surrounded by coffee plantations and tribal culture.', price: '₹8199'},
-      { region: 'east', name: 'Chilika Lake Villages', img: 'https://images.pexels.com/photos/247478/pexels-photo-247478.jpeg', desc: 'Witness flamingos, fishing communities, and boat rides.', price: '₹9699' },
-      { region: 'east', name: 'Khonoma', img: 'https://images.pexels.com/photos/460672/pexels-photo-460672.jpeg', desc: 'India's first green village, known for eco-tourism.', price: '₹8899' },
-      { region: 'south', name: 'Pochampally', img: 'https://images.pexels.com/photos/1107717/pexels-photo-1107717.jpeg', desc: 'Famous for Ikat textiles and vibrant village traditions.', price: '₹6799' },
-      { region: 'south', name: 'Banavasi', img: 'https://static2.tripoto.com/media/filter/nl/img/20582/TripDocument/pic_2_4.jpg', desc: 'Old town with temples, festivals, and forests.', price: '₹7599' },
-      { region: 'north', name: 'Almora', img: 'https://static2.tripoto.com/media/transfer/img/OgData/1465630202_kosi_river_valley_near_almora_uttarakhand_india.jpg', desc: 'Serene village in Kumaon hills with heritage trails.', price: '₹9999' },
-      { region: 'west', name: 'Jawhar', img: 'https://th.bing.com/th/id/R.27a190ebea50aaedd30a8f26c411b61c?rik=ZLbJZ%2fuk6f2KDw&riu=http%3a%2f%2fmaharashtraplanet.com%2fwp-content%2fuploads%2f2013%2f10%2fhanuman-point-jawhar.jpg&ehk=SkVpJrqjAlU7teKJXLqheGnGrLbFztzVs5kmDU8KUJg%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1', desc: 'Hill station known for tribal culture and art.', price: '₹6999' }
-    ];
+    let allRuralPlaces = [];
 
-    const container = document.getElementById('cardContainer');
-    places.forEach(p => {
-      const col = document.createElement('div');
-      col.className = `col-md-4 filter-card ${p.region}`;
-      col.innerHTML = `
-        <div class="highlight-card">
-          <img src="${p.img}" alt="${p.name}">
-          <h4>${p.name}</h4>
-          <p>${p.desc}</p>
-          <p><strong>Starting at: ${p.price}</strong></p>
-          <a href="booking.html?place=${encodeURIComponent(p.name)}" class="btn btn-primary">Book Now</a>
-        </div>
-      `;
-      container.appendChild(col);
-    });
+    async function loadRuralPlaces() {
+      const container = document.getElementById('cardContainer');
+      container.innerHTML = '<div class="text-center py-5"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2">Loading rural places...</p></div>';
+      
+      try {
+        const res = await fetch('/api/rural-places');
+        allRuralPlaces = await res.json();
+        
+        if (!Array.isArray(allRuralPlaces)) {
+          throw new Error('Unexpected response format');
+        }
+        
+        if (allRuralPlaces.length === 0) {
+          container.innerHTML = '<div class="col-12 text-center text-muted py-5">No rural places available.</div>';
+          return;
+        }
+        
+        displayRuralPlaces(allRuralPlaces);
+      } catch (error) {
+        container.innerHTML = `<div class="col-12 text-center"><div class="alert alert-danger">Error loading rural places: ${error.message}</div></div>`;
+      }
+    }
 
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const cards = document.querySelectorAll('.filter-card');
-    filterButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const filter = button.getAttribute('data-filter');
-        document.querySelectorAll('.filter-card').forEach(card => {
-          if (filter === 'all' || card.classList.contains(filter)) {
-            card.classList.remove('hidden');
-          } else {
-            card.classList.add('hidden');
-          }
+    function displayRuralPlaces(places) {
+      const container = document.getElementById('cardContainer');
+      container.innerHTML = '';
+      
+      places.forEach(place => {
+        const col = document.createElement('div');
+        col.className = `col-md-4 filter-card ${place.region}`;
+        col.innerHTML = `
+          <div class="highlight-card">
+            <img src="${place.image}" alt="${place.name}" onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
+            <h4>${place.name}</h4>
+            <p>${place.description}</p>
+            <p><strong>Starting at: ${place.price}</strong></p>
+            <a href="booking.html?place=${encodeURIComponent(place.name)}" class="btn btn-primary">Book Now</a>
+          </div>
+        `;
+        container.appendChild(col);
+      });
+    }
+
+    function filterRuralPlaces(region) {
+      const cards = document.querySelectorAll('.filter-card');
+      cards.forEach(card => {
+        if (region === 'all' || card.classList.contains(region)) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', () => {
+      loadRuralPlaces();
+      
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const filter = button.getAttribute('data-filter');
+          
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
+          
+          filterRuralPlaces(filter);
         });
       });
     });

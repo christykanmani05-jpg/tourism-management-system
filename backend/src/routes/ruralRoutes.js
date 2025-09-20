@@ -1,0 +1,110 @@
+const express = require("express");
+const RuralPlace = require("../models/RuralPlace");
+
+const router = express.Router();
+
+// Get all active rural places (public)
+router.get("/rural-places", async (_req, res) => {
+  try {
+    const ruralPlaces = await RuralPlace.find({ status: 'active' }).sort({ createdAt: -1 });
+    res.json(ruralPlaces);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+// Admin routes for rural place management
+// Get all rural places for admin
+router.get("/admin/rural-places", async (_req, res) => {
+  try {
+    const ruralPlaces = await RuralPlace.find().sort({ createdAt: -1 });
+    res.json(ruralPlaces);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+// Create new rural place
+router.post("/admin/rural-places", async (req, res) => {
+  try {
+    const { name, description, image, region, price } = req.body;
+
+    if (!name || !description || !image || !region || !price) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const ruralPlace = new RuralPlace({ 
+      name, 
+      description, 
+      image, 
+      region, 
+      price,
+      createdBy: 'admin'
+    });
+    
+    await ruralPlace.save();
+    res.status(201).json({ message: "Rural place created successfully", ruralPlace });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+// Update rural place
+router.put("/admin/rural-places/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, description, image, region, price, status } = req.body;
+
+    const ruralPlace = await RuralPlace.findByIdAndUpdate(
+      id,
+      { name, description, image, region, price, status },
+      { new: true }
+    );
+
+    if (!ruralPlace) {
+      return res.status(404).json({ message: "Rural place not found" });
+    }
+
+    res.json({ message: "Rural place updated successfully", ruralPlace });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+// Delete rural place
+router.delete("/admin/rural-places/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const ruralPlace = await RuralPlace.findByIdAndDelete(id);
+    
+    if (!ruralPlace) {
+      return res.status(404).json({ message: "Rural place not found" });
+    }
+    
+    res.json({ message: "Rural place deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+// Toggle rural place status
+router.patch("/admin/rural-places/:id/toggle", async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const ruralPlace = await RuralPlace.findById(id);
+    if (!ruralPlace) {
+      return res.status(404).json({ message: "Rural place not found" });
+    }
+    
+    ruralPlace.status = ruralPlace.status === 'active' ? 'inactive' : 'active';
+    await ruralPlace.save();
+    
+    res.json({ message: `Rural place ${ruralPlace.status}`, ruralPlace });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+module.exports = router;

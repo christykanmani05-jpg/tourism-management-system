@@ -7,6 +7,7 @@ const authRoutes = require("./routes/authRoutes");
 const dashboardRoutes = require("./routes/dashboard");
 const guideRoutes = require("./routes/guideRoutes");
 const destinationRoutes = require("./routes/destinationRoutes");
+const ruralRoutes = require("./routes/ruralRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -54,5 +55,6 @@ app.use("/api", authRoutes);
 app.use("/api", dashboardRoutes);
 app.use("/api", guideRoutes);
 app.use("/api", destinationRoutes);
+app.use("/api", ruralRoutes);
 
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
