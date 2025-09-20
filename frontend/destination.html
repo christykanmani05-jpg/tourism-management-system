@@ -121,15 +121,7 @@
   <!-- Filters -->
   <div class="container">
     <div class="filter-bar row justify-content-center g-3">
-      <div class="col-md-3">
-        <select class="form-select">
-          <option selected>All Regions</option>
-          <option>Asia</option>
-          <option>Europe</option>
-          <option>Americas</option>
-        </select>
-      </div>
-      <div class="col-md-3">
+      <div class="col-md-4">
         <select class="form-select">
           <option selected>All Types</option>
           <option>Mountains</option>
@@ -137,7 +129,7 @@
           <option>Forest</option>
         </select>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-4">
         <input type="text" class="form-control" placeholder="Search Destinations">
       </div>
       <div class="col-md-2">
@@ -191,7 +183,7 @@
                             <h5>${dest.name}</h5>
                             <p>${dest.description}</p>
                             <div class="mb-2">
-                                <small class="text-muted">${dest.region} • ${dest.type}</small>
+                                <small class="text-muted">${dest.type}</small>
       </div>
                             <div class="mb-2">
                                 <strong>${dest.price}</strong>
@@ -204,16 +196,12 @@
         }
 
         function filterDestinations() {
-  const region = document.querySelectorAll("select")[0].value.toLowerCase();
-  const type = document.querySelectorAll("select")[1].value.toLowerCase();
+  const type = document.querySelectorAll("select")[0].value.toLowerCase();
   const search = document.querySelector("input[type='text']").value.toLowerCase();
 
             let filtered = allDestinations.filter(dest => {
     let match = true;
 
-    if (region !== "all regions") {
-                    match = match && dest.region.toLowerCase() === region;
-    }
     if (type !== "all types") {
                     match = match && dest.type.toLowerCase() === type;
                 }

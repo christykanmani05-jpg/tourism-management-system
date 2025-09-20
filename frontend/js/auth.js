@@ -45,22 +45,65 @@ function updateProfileInNavbar() {
   if (userData) {
     try {
       const user = JSON.parse(userData);
+      const adminProfileDropdown = document.getElementById('admin-profile-dropdown');
+      const userProfileSimple = document.getElementById('user-profile-simple');
+      // No separate navigation items for regular users - logout is now part of profile
+
+      // Profile image handling
       const profileImage = document.getElementById('profileImage');
+      const profileImageMenu = document.getElementById('profileImageMenu');
+      const userProfileImage = document.getElementById('userProfileImage');
       const profileUsername = document.getElementById('profileUsername');
-      const adminNavItem = document.getElementById('admin-nav-item');
-      
-      if (profileImage) {
-        const imageSrc = user.profilePhoto && user.profilePhoto.startsWith('/uploads/') 
-          ? `http://localhost:5001${user.profilePhoto}` 
-          : (user.profilePhoto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png');
-        profileImage.src = imageSrc;
-      }
-      if (profileUsername) {
-        profileUsername.textContent = user.username || 'User';
-      }
-      if (adminNavItem) {
-        // Show admin link only for admin users
-        adminNavItem.style.display = (user.role === 'admin') ? 'block' : 'none';
+      const profileUsernameMenu = document.getElementById('profileUsernameMenu');
+      const userProfileName = document.getElementById('userProfileName');
+
+      if (user.role === 'admin') {
+        // Show admin profile dropdown
+        if (adminProfileDropdown) {
+          adminProfileDropdown.style.display = 'block';
+        }
+        if (userProfileSimple) {
+          userProfileSimple.style.display = 'none';
+        }
+
+        // Update admin profile images and names
+        if (profileImage && user.profilePhoto) {
+          const imageSrc = user.profilePhoto.startsWith('/uploads/') 
+            ? `http://localhost:5001${user.profilePhoto}` 
+            : user.profilePhoto;
+          profileImage.src = imageSrc;
+        }
+        if (profileImageMenu && user.profilePhoto) {
+          const imageSrc = user.profilePhoto.startsWith('/uploads/') 
+            ? `http://localhost:5001${user.profilePhoto}` 
+            : user.profilePhoto;
+          profileImageMenu.src = imageSrc;
+        }
+        if (profileUsername) {
+          profileUsername.textContent = user.username || 'Admin';
+        }
+        if (profileUsernameMenu) {
+          profileUsernameMenu.textContent = user.username || 'Admin';
+        }
+      } else {
+        // Show simple user profile
+        if (adminProfileDropdown) {
+          adminProfileDropdown.style.display = 'none';
+        }
+        if (userProfileSimple) {
+          userProfileSimple.style.display = 'block';
+        }
+
+        // Update user profile image and name
+        if (userProfileImage && user.profilePhoto) {
+          const imageSrc = user.profilePhoto.startsWith('/uploads/') 
+            ? `http://localhost:5001${user.profilePhoto}` 
+            : user.profilePhoto;
+          userProfileImage.src = imageSrc;
+        }
+        if (userProfileName) {
+          userProfileName.textContent = user.username || 'User';
+        }
       }
     } catch (e) {
       console.error('Error parsing user data:', e);
