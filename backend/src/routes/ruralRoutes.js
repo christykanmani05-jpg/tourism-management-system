@@ -108,3 +108,4 @@ router.patch("/admin/rural-places/:id/toggle", async (req, res) => {
 });
 
 module.exports = router;
+
