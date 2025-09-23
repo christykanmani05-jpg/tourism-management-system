@@ -59,26 +59,34 @@
                     return;
                 }
                 
-                container.innerHTML = guides.map(guide => `
+                container.innerHTML = guides.map(guide => {
+                    // Use same-origin absolute path when stored path starts with /uploads/
+                    const imgSrc = guide.image || '';
+                    return `
                     <div class="guide-card">
-                        <h5>${guide.name} (@${guide.username})</h5>
-                        <div class="guide-info">
-                            <strong>Email:</strong> ${guide.email}
-                        </div>
-                        <div class="guide-info">
-                            <strong>Destination:</strong> ${guide.destination}
-                        </div>
-                        <div class="guide-info">
-                            <strong>Languages:</strong>
-                            <div class="languages">
-                                ${(guide.languages || []).map(lang => `<span class="language-tag">${lang}</span>`).join('')}
+                        <div class="d-flex align-items-start gap-3">
+                            ${imgSrc ? `<img src="${imgSrc}" alt="${guide.name}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #e6e6e6;">` : ''}
+                            <div class="flex-grow-1">
+                                <h5>${guide.name} (@${guide.username})</h5>
+                                <div class="guide-info">
+                                    <strong>Email:</strong> ${guide.email}
+                                </div>
+                                <div class="guide-info">
+                                    <strong>Destination:</strong> ${guide.destination}
+                                </div>
+                                <div class="guide-info">
+                                    <strong>Languages:</strong>
+                                    <div class="languages">
+                                        ${(guide.languages || []).map(lang => `<span class="language-tag">${lang}</span>`).join('')}
+                                    </div>
+                                </div>
+                                <div class="guide-info">
+                                    <strong>Added:</strong> ${new Date(guide.createdAt).toLocaleDateString()}
+                                </div>
                             </div>
                         </div>
-                        <div class="guide-info">
-                            <strong>Added:</strong> ${new Date(guide.createdAt).toLocaleDateString()}
-                        </div>
-                    </div>
-                `).join('');
+                    </div>`;
+                }).join('');
             } catch (error) {
                 container.innerHTML = `<div class="error">Error loading guides: ${error.message}</div>`;
             }

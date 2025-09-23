@@ -8,6 +8,8 @@ const dashboardRoutes = require("./routes/dashboard");
 const guideRoutes = require("./routes/guideRoutes");
 const destinationRoutes = require("./routes/destinationRoutes");
 const ruralRoutes = require("./routes/ruralRoutes");
+const chatRoutes = require("./routes/chatRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -56,5 +58,7 @@ app.use("/api", dashboardRoutes);
 app.use("/api", guideRoutes);
 app.use("/api", destinationRoutes);
 app.use("/api", ruralRoutes);
+app.use("/api", chatRoutes);
+app.use("/api", paymentRoutes);
 
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));

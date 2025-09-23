@@ -88,6 +88,9 @@
                         <button class="btn btn-outline-success destination-filter-tab" data-destination-filter="active">Active</button>
                         <button class="btn btn-outline-secondary destination-filter-tab" data-destination-filter="inactive">Inactive</button>
                     </div>
+                    <div>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDestinationModal">Add New Destination</button>
+                    </div>
                 </div>
             </div>
             
@@ -171,6 +174,69 @@
         </div>
     </div>
 
+    <!-- Add Destination Modal -->
+    <div class="modal fade" id="addDestinationModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Destination</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addDestinationForm">
+                        <div class="mb-3">
+                            <label for="destName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="destName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="destDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="destDescription" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="destImage" class="form-label">Image File</label>
+                            <input type="file" accept="image/*" class="form-control" id="destImage" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="destRegion" class="form-label">Region</label>
+                                    <select class="form-select" id="destRegion" required>
+                                        <option value="">Select Region</option>
+                                        <option value="north">North</option>
+                                        <option value="south">South</option>
+                                        <option value="east">East</option>
+                                        <option value="west">West</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="destType" class="form-label">Type</label>
+                                    <select class="form-select" id="destType" required>
+                                        <option value="">Select Type</option>
+                                        <option value="beach">Beach</option>
+                                        <option value="mountain">Mountain</option>
+                                        <option value="city">City</option>
+                                        <option value="heritage">Heritage</option>
+                                        <option value="wildlife">Wildlife</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="destPrice" class="form-label">Price Range</label>
+                            <input type="text" class="form-control" id="destPrice" placeholder="e.g., ₹9,999 - ₹24,999" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="addDestination()">Add Destination</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Add Rural Place Modal -->
     <div class="modal fade" id="addRuralModal" tabindex="-1">
         <div class="modal-dialog">
@@ -190,8 +256,8 @@
                             <textarea class="form-control" id="ruralDescription" rows="3" required></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="ruralImage" class="form-label">Image URL</label>
-                            <input type="url" class="form-control" id="ruralImage" required>
+                            <label for="ruralImage" class="form-label">Image File</label>
+                            <input type="file" accept="image/*" class="form-control" id="ruralImage" required>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -435,6 +501,45 @@
             }
         }
 
+        async function addDestination() {
+            const name = document.getElementById('destName').value;
+            const description = document.getElementById('destDescription').value;
+            const imageFile = document.getElementById('destImage').files[0];
+            const region = document.getElementById('destRegion').value;
+            const type = document.getElementById('destType').value;
+            const price = document.getElementById('destPrice').value;
+
+            if (!name || !description || !imageFile || !region || !type || !price) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            try {
+                const form = new FormData();
+                form.append('name', name);
+                form.append('description', description);
+                form.append('region', region);
+                form.append('type', type);
+                form.append('price', price);
+                form.append('image', imageFile);
+
+                const res = await fetch('/api/admin/destinations', {
+                    method: 'POST',
+                    body: form
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message || 'Failed to add destination');
+
+                alert('Destination added successfully!');
+                document.getElementById('addDestinationForm').reset();
+                bootstrap.Modal.getInstance(document.getElementById('addDestinationModal')).hide();
+                loadDestinations();
+            } catch (error) {
+                alert('Error adding destination: ' + error.message);
+            }
+        }
+
         // Rural Places Management Functions
         async function loadRuralPlaces() {
             const container = document.getElementById('rural-container');
@@ -497,22 +602,28 @@
         async function addRuralPlace() {
             const name = document.getElementById('ruralName').value;
             const description = document.getElementById('ruralDescription').value;
-            const image = document.getElementById('ruralImage').value;
+            const imageFile = document.getElementById('ruralImage').files[0];
             const region = document.getElementById('ruralRegion').value;
             const price = document.getElementById('ruralPrice').value;
 
-            if (!name || !description || !image || !region || !price) {
+            if (!name || !description || !imageFile || !region || !price) {
                 alert('Please fill in all fields');
                 return;
             }
 
             try {
+                const form = new FormData();
+                form.append('name', name);
+                form.append('description', description);
+                form.append('region', region);
+                form.append('price', price);
+                form.append('image', imageFile);
+
                 const res = await fetch('/api/admin/rural-places', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, description, image, region, price })
+                    body: form
                 });
-                
+
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.message || 'Failed to add rural place');
                 

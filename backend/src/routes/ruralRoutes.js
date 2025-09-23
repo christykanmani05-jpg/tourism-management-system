@@ -1,7 +1,28 @@
 const express = require("express");
 const RuralPlace = require("../models/RuralPlace");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
 const router = express.Router();
+
+// Multer setup for rural images
+const ruralUploadDir = path.join(__dirname, "../uploads");
+if (!fs.existsSync(ruralUploadDir)) {
+  fs.mkdirSync(ruralUploadDir, { recursive: true });
+}
+const ruralStorage = multer.diskStorage({
+  destination: function (_req, _file, cb) { cb(null, ruralUploadDir); },
+  filename: function (_req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, 'rural-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+const ruralFileFilter = (req, file, cb) => {
+  if (file.mimetype && file.mimetype.startsWith('image/')) return cb(null, true);
+  cb(new Error('Only image files are allowed'));
+};
+const uploadRuralImage = multer({ storage: ruralStorage, fileFilter: ruralFileFilter, limits: { fileSize: 5 * 1024 * 1024 } });
 
 // Get all active rural places (public)
 router.get("/rural-places", async (_req, res) => {
@@ -25,18 +46,23 @@ router.get("/admin/rural-places", async (_req, res) => {
 });
 
 // Create new rural place
-router.post("/admin/rural-places", async (req, res) => {
+router.post("/admin/rural-places", uploadRuralImage.single('image'), async (req, res) => {
   try {
-    const { name, description, image, region, price } = req.body;
+    const { name, description, region, price } = req.body;
 
-    if (!name || !description || !image || !region || !price) {
+    if (!name || !description || !region || !price) {
       return res.status(400).json({ message: "All fields are required" });
     }
+    if (!req.file) {
+      return res.status(400).json({ message: "Image file is required" });
+    }
+
+    const imagePath = `/uploads/${req.file.filename}`;
 
     const ruralPlace = new RuralPlace({ 
       name, 
       description, 
-      image, 
+      image: imagePath, 
       region, 
       price,
       createdBy: 'admin'
@@ -50,14 +76,19 @@ router.post("/admin/rural-places", async (req, res) => {
 });
 
 // Update rural place
-router.put("/admin/rural-places/:id", async (req, res) => {
+router.put("/admin/rural-places/:id", uploadRuralImage.single('image'), async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, image, region, price, status } = req.body;
+    const { name, description, region, price, status } = req.body;
+
+    const update = { name, description, region, price, status };
+    if (req.file) {
+      update.image = `/uploads/${req.file.filename}`;
+    }
 
     const ruralPlace = await RuralPlace.findByIdAndUpdate(
       id,
-      { name, description, image, region, price, status },
+      update,
       { new: true }
     );
 
@@ -108,4 +139,5 @@ router.patch("/admin/rural-places/:id/toggle", async (req, res) => {
 });
 
 module.exports = router;
+
 

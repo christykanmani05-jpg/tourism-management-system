@@ -1,16 +1,39 @@
 const express = require("express");
 const Guide = require("../models/Guide");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
 const router = express.Router();
 
+// Multer setup for guide images
+const guideUploadDir = path.join(__dirname, "../uploads");
+if (!fs.existsSync(guideUploadDir)) {
+  fs.mkdirSync(guideUploadDir, { recursive: true });
+}
+const guideStorage = multer.diskStorage({
+  destination: function (_req, _file, cb) { cb(null, guideUploadDir); },
+  filename: function (_req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, 'guide-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+const guideFileFilter = (req, file, cb) => {
+  if (file.mimetype && file.mimetype.startsWith('image/')) return cb(null, true);
+  cb(new Error('Only image files are allowed'));
+};
+const uploadGuideImage = multer({ storage: guideStorage, fileFilter: guideFileFilter, limits: { fileSize: 5 * 1024 * 1024 } });
+
 // Create a new guide
-router.post("/guides", async (req, res) => {
+router.post("/guides", uploadGuideImage.single('image'), async (req, res) => {
   try {
     const { name, username, email, destination, languages } = req.body;
 
     if (!name || !username || !email || !destination || !languages) {
       return res.status(400).json({ message: "All fields are required" });
     }
+    // Image is optional for guides; include if provided
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
 
     const normalizedLanguages = Array.isArray(languages)
       ? languages
@@ -19,7 +42,7 @@ router.post("/guides", async (req, res) => {
           .map((l) => l.trim())
           .filter(Boolean);
 
-    const guide = new Guide({ name, username, email, destination, languages: normalizedLanguages });
+    const guide = new Guide({ name, username, email, destination, image: imagePath, languages: normalizedLanguages });
     await guide.save();
     res.status(201).json({ message: "Guide created", guide });
   } catch (err) {

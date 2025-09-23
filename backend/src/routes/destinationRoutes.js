@@ -1,7 +1,30 @@
 const express = require("express");
 const Destination = require("../models/Destination");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
 const router = express.Router();
+
+// Multer setup for destination images
+const destUploadDir = path.join(__dirname, "../uploads");
+if (!fs.existsSync(destUploadDir)) {
+  fs.mkdirSync(destUploadDir, { recursive: true });
+}
+const destinationStorage = multer.diskStorage({
+  destination: function (_req, _file, cb) {
+    cb(null, destUploadDir);
+  },
+  filename: function (_req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, 'destination-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+const destinationFileFilter = (req, file, cb) => {
+  if (file.mimetype && file.mimetype.startsWith('image/')) return cb(null, true);
+  cb(new Error('Only image files are allowed'));
+};
+const uploadDestinationImage = multer({ storage: destinationStorage, fileFilter: destinationFileFilter, limits: { fileSize: 5 * 1024 * 1024 } });
 
 // Get all active destinations (public)
 router.get("/destinations", async (_req, res) => {
@@ -25,18 +48,23 @@ router.get("/admin/destinations", async (_req, res) => {
 });
 
 // Create new destination
-router.post("/admin/destinations", async (req, res) => {
+router.post("/admin/destinations", uploadDestinationImage.single('image'), async (req, res) => {
   try {
-    const { name, description, image, region, type, price } = req.body;
+    const { name, description, region, type, price } = req.body;
 
-    if (!name || !description || !image || !region || !type || !price) {
+    if (!name || !description || !region || !type || !price) {
       return res.status(400).json({ message: "All fields are required" });
     }
+    if (!req.file) {
+      return res.status(400).json({ message: "Image file is required" });
+    }
+
+    const imagePath = `/uploads/${req.file.filename}`;
 
     const destination = new Destination({ 
       name, 
       description, 
-      image, 
+      image: imagePath, 
       region, 
       type, 
       price,
@@ -51,14 +79,19 @@ router.post("/admin/destinations", async (req, res) => {
 });
 
 // Update destination
-router.put("/admin/destinations/:id", async (req, res) => {
+router.put("/admin/destinations/:id", uploadDestinationImage.single('image'), async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, image, region, type, price, status } = req.body;
+    const { name, description, region, type, price, status } = req.body;
+
+    const update = { name, description, region, type, price, status };
+    if (req.file) {
+      update.image = `/uploads/${req.file.filename}`;
+    }
 
     const destination = await Destination.findByIdAndUpdate(
       id,
-      { name, description, image, region, type, price, status },
+      update,
       { new: true }
     );
 

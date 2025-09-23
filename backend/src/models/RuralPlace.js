@@ -15,3 +15,4 @@ const ruralPlaceSchema = new mongoose.Schema(
 
 module.exports = mongoose.model("RuralPlace", ruralPlaceSchema);
 
+

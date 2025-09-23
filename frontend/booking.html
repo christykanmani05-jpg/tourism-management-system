@@ -118,6 +118,7 @@
     // Get destination from URL
     const params = new URLSearchParams(window.location.search);
     const destination = params.get("destination") || "Unknown Destination";
+    const packagePrice = Number(params.get('price')) || 0;
     document.getElementById("destination-title").innerText = `Book Your Trip to ${destination}`;
     document.getElementById("destination").value = destination;
 
@@ -157,6 +158,10 @@
       const date = document.getElementById("travel-date").value;
       const guests = document.getElementById("guests").value;
       const pkg = document.getElementById("package").value;
+      const computedBase = packagePrice > 0 ? packagePrice : (pkg === 'Luxury' ? 19999 : pkg === 'Deluxe' ? 12999 : 7999);
+      const subtotal = computedBase * Math.max(1, Number(guests||1));
+      const taxes = Math.round(subtotal * 0.18);
+      const total = subtotal + taxes;
       document.getElementById("summary").innerHTML = `
         <p><strong>Destination:</strong> ${destination}</p>
         <p><strong>Name:</strong> ${name}</p>
@@ -165,13 +170,30 @@
         <p><strong>Travel Date:</strong> ${date}</p>
         <p><strong>Guests:</strong> ${guests}</p>
         <p><strong>Package:</strong> ${pkg}</p>
+        <hr>
+        <p><strong>Subtotal:</strong> ₹${subtotal.toLocaleString('en-IN')}</p>
+        <p><strong>Taxes & Fees (18%):</strong> ₹${taxes.toLocaleString('en-IN')}</p>
+        <p><strong>Total:</strong> ₹${total.toLocaleString('en-IN')}</p>
       `;
     }
 
-    // Submit handler
+    // Simple pricing by package
+    function computeTotal(pkg, guests){
+      const base = packagePrice > 0 ? packagePrice : (pkg === 'Luxury' ? 19999 : pkg === 'Deluxe' ? 12999 : 7999);
+      const g = Math.max(1, Number(guests||1));
+      return base * g;
+    }
+
+    // Submit handler → redirect to dummy payment page
     document.getElementById("booking-form").addEventListener("submit", function(e) {
       e.preventDefault();
-      alert("Booking confirmed! We'll contact you shortly.");
+      const date = document.getElementById("travel-date").value;
+      const guests = document.getElementById("guests").value;
+      const pkg = document.getElementById("package").value;
+      const total = computeTotal(pkg, guests);
+      const ref = 'BK' + Math.floor(Math.random()*1e6);
+      const qs = new URLSearchParams({ dest: destination, date, guests, total: String(total), ref }).toString();
+      window.location.href = '/payment.html?' + qs;
     });
 
     document.querySelectorAll('.book-btn').forEach(btn => {
@@ -199,8 +221,9 @@
       .then(res => res.json())
       .then(data => {
         if (data.message) {
-          alert('Booking confirmed! You will receive a confirmation email.');
-          window.location.reload();
+          const ref = 'BK' + Math.floor(Math.random()*1e6);
+          const qs = new URLSearchParams({ dest: form.destination.value, date: new Date().toLocaleDateString(), guests: '1', total: '4999', ref }).toString();
+          window.location.href = '/payment.html?' + qs;
         } else {
           alert(data.error || 'Booking failed.');
         }

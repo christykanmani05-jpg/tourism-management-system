@@ -6,6 +6,7 @@ const guideSchema = new mongoose.Schema(
     username: { type: String, required: true, unique: true, trim: true },
     email: { type: String, required: true, unique: true, trim: true },
     destination: { type: String, required: true, trim: true },
+    image: { type: String, default: null },
     languages: [{ type: String, trim: true }],
     status: { 
       type: String, 

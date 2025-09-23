@@ -173,6 +173,11 @@
             }
         }
 
+        function formatINR(n){
+            const num = Number(String(n).replace(/[,₹\s]/g, '')) || 0;
+            try { return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(num); } catch { return '₹' + num; }
+        }
+
         function displayDestinations(destinations) {
             const container = document.getElementById('destinations-container');
             container.innerHTML = destinations.map(dest => `
@@ -186,9 +191,9 @@
                                 <small class="text-muted">${dest.type}</small>
       </div>
                             <div class="mb-2">
-                                <strong>${dest.price}</strong>
+                                <strong>${formatINR(dest.price)}</strong>
     </div>
-                            <a href="booking.html?destination=${encodeURIComponent(dest.name)}" class="book-btn">Book Now</a>
+                            <a href="booking.html?destination=${encodeURIComponent(dest.name)}&price=${encodeURIComponent(String(dest.price).replace(/[,₹\s]/g,''))}" class="book-btn">Book Now</a>
       </div>
     </div>
                 </div>

@@ -29,8 +29,13 @@ function updateProfileInNavbar() {
   const profileUsernameMenu = document.getElementById('profileUsernameMenu');
   const userProfileName = document.getElementById('userProfileName');
   const userProfileNameMenu = document.getElementById('userProfileNameMenu');
+  const navContactItem = document.getElementById('nav-contact-item');
 
   if (user.role === 'admin') {
+    // Hide Contact link for admins
+    if (navContactItem) {
+      navContactItem.style.display = 'none';
+    }
     // Show admin profile dropdown
     if (adminProfileDropdown) {
       adminProfileDropdown.style.display = 'block';
@@ -59,6 +64,10 @@ function updateProfileInNavbar() {
       profileUsernameMenu.textContent = user.username || 'Admin';
     }
   } else {
+    // Show Contact link for non-admins
+    if (navContactItem) {
+      navContactItem.style.display = '';
+    }
     // Show user profile dropdown
     if (adminProfileDropdown) {
       adminProfileDropdown.style.display = 'none';
