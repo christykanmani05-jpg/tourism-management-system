@@ -5,10 +5,70 @@
   <title>Travel Packages | TrioTrails</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/theme.css">
   <style>
-    body { background-color: #f8f9fa; }
-    h2 { text-align: center; margin: 40px 0 20px; }
-    .navbar-brand { font-weight: bold; }
+    body { background: var(--bg); color: var(--text); }
+    
+    .packages-hero {
+      background: linear-gradient(135deg, var(--brand-900), var(--brand-800));
+      color: #fff;
+      padding: 100px 0 60px;
+      margin-bottom: 40px;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+    
+    .packages-hero h1 {
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+    }
+    
+    .packages-hero p {
+      color: rgba(255,255,255,0.9);
+      font-size: 1.1rem;
+    }
+    
+    .card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    
+    .card-img-top {
+      height: 200px;
+      object-fit: cover;
+    }
+    
+    .card-title {
+      color: var(--text);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    
+    .card-text {
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    
+    .card ul {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+    
+    .card ul li {
+      margin-bottom: 4px;
+    }
+    
+    .container {
+      max-width: 1200px;
+    }
   </style>
 </head>
 <body>
@@ -17,206 +77,88 @@
 <div id="navbar-host"></div>
 
 
+<div class="packages-hero">
+  <div class="container text-center">
+    <h1>Explore Our Top Travel Packages</h1>
+    <p>Discover amazing destinations with our curated travel experiences</p>
+  </div>
+</div>
+
 <div class="container">
-  <h2>Explore Our Top Travel Packages</h2>
-  <div class="row mt-4">
-
-    <!-- Repeat cards for 15 packages -->
-    <!-- Example card structure -->
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <img src="https://cdn.getyourguide.com/image/format=auto,fit=crop,gravity=auto,quality=60,width=270,height=180,dpr=2/tour_img/d322f3e2b653a50865a783f8f4656e54faa531d76af1974696bb4d4432afed07.png" class="card-img-top" alt="Bali Honeymoon">
-        <div class="card-body">
-          <h5 class="card-title">Bali Honeymoon Special</h5>
-          <p class="card-text">5 Days / 4 Nights – ₹95,000 per couple</p>
-          <ul>
-            <li>4-star private villa stay</li>
-            <li>Romantic dinners, tours & transfers</li>
-          </ul>
-          <a href="#" class="btn btn-primary" data-dest="Bali">Book Now</a>
-        </div>
-      </div>
+  <div class="row g-4" id="packages-container">
+    <div class="col-12 text-center">
+      <div class="loading">Loading packages...</div>
     </div>
-
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <img src="https://wallpapercave.com/wp/wp7029155.jpg" class="card-img-top" alt="Leh Ladakh">
-        <div class="card-body">
-          <h5 class="card-title">Leh-Ladakh Adventure Escape</h5>
-          <p class="card-text">7 Days / 6 Nights – ₹45,000 per person</p>
-          <ul><li>Leh, Nubra, Pangong with guide</li><li>Private transport & permits</li></ul>
-          <a href="#" class="btn btn-primary" data-dest="Leh-Ladakh">Book Now</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <img src="https://www.tourwings.com/media/packages/af0de8e05f42b46c59cd989a8013b29e.jpeg" class="card-img-top" alt="Kerala">
-        <div class="card-body">
-          <h5 class="card-title">Kerala Backwaters Bliss</h5>
-          <p class="card-text">6 Days / 5 Nights – ₹30,000 per person</p>
-          <ul><li>Munnar, Alleppey, Kochi</li><li>Luxury houseboat stay</li></ul>
-          <a href="#" class="btn btn-primary" data-dest="Kerala">Book Now</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <img src="https://www.katalay.net/images/lg/b1f3cb683f193079437cfeeacfa477c3.jpg" class="card-img-top" alt="Dubai">
-        <div class="card-body">
-          <h5 class="card-title">Dubai Luxury Tour</h5>
-          <p class="card-text">5 Days / 4 Nights – ₹1,20,000 per person</p>
-          <ul><li>Burj Khalifa, Desert Safari</li><li>Visa, hotel, transfers</li></ul>
-          <a href="#" class="btn btn-primary" data-dest="Dubai">Book Now</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <img src="https://th.bing.com/th/id/R.04a14a4f4f85877221dd09f4239c2573?rik=7p2EV1rHVEUuVg&riu=http%3a%2f%2fwww.indiadivine.org%2fwp-content%2fuploads%2f2015%2f08%2fmadurai-03.jpg&ehk=%2bNzuW9ePG6n2AxhCrclPSl4HoPdFabtGACxh1aLjOKM%3d&risl=&pid=ImgRaw&r=0" class="card-img-top" alt="South India">
-        <div class="card-body">
-          <h5 class="card-title">South India Temple Trail</h5>
-          <p class="card-text">7 Days / 6 Nights – ₹28,000 per person</p>
-          <ul><li>Madurai, Rameswaram, Thanjavur</li><li>Cultural shows & darshan</li></ul>
-          <a href="#" class="btn btn-primary" data-dest="SouthIndia">Book Now</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <img src="https://www.zippitrip.in/serverimage/bf9ea733-ddd0-45f8-9943-de140704c8d4.jpg" class="card-img-top" alt="North East">
-        <div class="card-body">
-          <h5 class="card-title">North East Delight</h5>
-          <p class="card-text">6 Days / 5 Nights – ₹32,000 per person</p>
-          <ul><li>Shillong, Cherrapunji, Dawki</li><li>Homestays & waterfalls</li></ul>
-          <a href="#" class="btn btn-primary" data-dest="NorthEast">Book Now</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <img src="https://2cw.co.uk/mv300/images/1+37dcd6-01.jpg" class="card-img-top" alt="Maldives">
-        <div class="card-body">
-          <h5 class="card-title">Maldives Beach Escape</h5>
-          <p class="card-text">4 Days / 3 Nights – ₹85,000 per couple</p>
-          <ul><li>Beachfront villa stay</li><li>Snorkeling & sunset cruise</li></ul>
-          <a href="#" class="btn btn-primary" data-dest="Maldives">Book Now</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <img src="https://www.privatetour.com/images/india/rich-culture-and-heritage-of-india-with-golden-triangle/rich-culture-and-heritage-of-india-with-golden-triangle-2-2018-12-13.jpg" class="card-img-top" alt="Golden Triangle">
-        <div class="card-body">
-          <h5 class="card-title">Golden Triangle India Tour</h5>
-          <p class="card-text">5 Days / 4 Nights – ₹22,000 per person</p>
-          <ul><li>Delhi, Agra, Jaipur</li><li>Hotels & guided tours</li></ul>
-          <a href="#" class="btn btn-primary" data-dest="GoldenTriangle">Book Now</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Additional 6 cards -->
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <img src="https://images.unsplash.com/photo-1529429617124-95b109e86b30" class="card-img-top" alt="Paris">
-        <div class="card-body">
-          <h5 class="card-title">Paris Romantic Getaway</h5>
-          <p class="card-text">5 Days / 4 Nights – ₹110,000 per couple</p>
-          <ul><li>Eiffel Tower, Seine cruise</li><li>4-star stay, wine tasting</li></ul>
-          <a href="#" class="btn btn-primary" data-dest="Paris">Book Now</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d" class="card-img-top" alt="New York">
-        <div class="card-body">
-          <h5 class="card-title">New York City Explorer</h5>
-          <p class="card-text">6 Days / 5 Nights – ₹130,000 per person</p>
-          <ul><li>Statue of Liberty, Times Square</li><li>Hotel & transfers</li></ul>
-          <a href="#" class="btn btn-primary" data-dest="NewYork">Book Now</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <img src="https://images.unsplash.com/photo-1561484930-53c5c3e33cb7" class="card-img-top" alt="Santorini">
-        <div class="card-body">
-          <h5 class="card-title">Santorini Island Escape</h5>
-          <p class="card-text">5 Days / 4 Nights – ₹115,000 per couple</p>
-          <ul><li>Luxury villas, caldera views</li><li>Sunset sailing</li></ul>
-          <a href="#" class="btn btn-primary" data-dest="Santorini">Book Now</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <img src="https://images.unsplash.com/photo-1577086664690-61b2ec05f3ac" class="card-img-top" alt="Kyoto">
-        <div class="card-body">
-          <h5 class="card-title">Kyoto Cultural Tour</h5>
-          <p class="card-text">5 Days / 4 Nights – ₹88,000 per person</p>
-          <ul><li>Temples, geisha district</li><li>Tea ceremony, local cuisine</li></ul>
-          <a href="#" class="btn btn-primary" data-dest="Kyoto">Book Now</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <img src="https://images.unsplash.com/photo-1503264116251-35a269479413" class="card-img-top" alt="Ooty">
-        <div class="card-body">
-          <h5 class="card-title">Ooty Hill Retreat</h5>
-          <p class="card-text">4 Days / 3 Nights – ₹20,000 per person</p>
-          <ul><li>Tea gardens, botanical gardens</li><li>Heritage train ride</li></ul>
-          <a href="#" class="btn btn-primary" data-dest="Ooty">Book Now</a>
-        </div>
-      </div>
-    </div>
-<div class="col-lg-4 col-md-6">
-<div class="card h-100">
-<img src="https://images.unsplash.com/photo-1597400533038-6c9acbb1b71a" class="card-img-top" alt="Coorg">
-<div class="card-body d-flex flex-column">
-<h5 class="card-title">Coorg Coffee Trails</h5>
-<p class="card-text mb-3">3 Days / 2 Nights – ₹25,000 per couple</p>
-<ul class="mb-4">
-<li>Luxury plantation stay</li>
-<li>Guided coffee estate tour</li>
-<li>Campfire and local cuisine</li>
-</ul>
-<div class="mt-auto">
-<button class="btn btn-primary w-100" onclick="bookNow('Coorg Coffee Trails', 25000)">Book Now</button>
-</div>
-</div>
-</div>
-</div>
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <img src="https://images.unsplash.com/photo-1551711764-d1a1e1d6a938" class="card-img-top" alt="Swiss Alps">
-        <div class="card-body">
-          <h5 class="card-title">Swiss Alps Adventure</h5>
-          <p class="card-text">7 Days / 6 Nights – ₹145,000 per person</p>
-          <ul><li>Mountain resorts, scenic trains</li><li>Glacier excursions</li></ul>
-          <a href="#" class="btn btn-primary" data-dest="SwissAlps">Book Now</a>
-        </div>
-      </div>
-    </div>
-
   </div>
 </div>
 
 <script src="/js/auth.js"></script>
 <script src="/js/navbar.js"></script>
 <script>
+  let allPackages = [];
+
+  // Load packages from API
+  async function loadPackages() {
+    const container = document.getElementById('packages-container');
+    container.innerHTML = '<div class="col-12 text-center"><div class="loading">Loading packages...</div></div>';
+    
+    try {
+      const res = await fetch('/api/packages');
+      allPackages = await res.json();
+      
+      if (!Array.isArray(allPackages)) {
+        throw new Error('Unexpected response format');
+      }
+      
+      renderPackages(allPackages);
+    } catch (error) {
+      container.innerHTML = `<div class="col-12 text-center"><div class="error">Error loading packages: ${error.message}</div></div>`;
+    }
+  }
+
+  // Render packages
+  function renderPackages(packages) {
+    const container = document.getElementById('packages-container');
+    
+    if (packages.length === 0) {
+      container.innerHTML = '<div class="col-12 text-center"><div class="text-muted py-5">No packages available at the moment.</div></div>';
+      return;
+    }
+    
+    container.innerHTML = packages.map(pkg => {
+      // Extract numeric price for booking
+      const priceText = pkg.price || '';
+      const match = priceText.replace(/[,₹]/g,'').match(/(\d{2,})/);
+      const numericPrice = match ? parseInt(match[1], 10) : 0;
+      
+      // Create booking URL
+      const params = new URLSearchParams({ destination: pkg.name });
+      if (numericPrice) params.set('price', String(numericPrice));
+      const bookingHref = `booking.html?${params.toString()}`;
+      
+      // Create features list
+      const featuresList = (pkg.features || []).map(feature => `<li>${feature}</li>`).join('');
+      
+      return `
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="card h-100">
+            <img src="${pkg.image}" class="card-img-top" alt="${pkg.name}" onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">${pkg.name}</h5>
+              <p class="card-text mb-3">${pkg.duration} – ${pkg.price}</p>
+              <ul class="mb-4">
+                ${featuresList}
+              </ul>
+              <div class="mt-auto">
+                <a href="${bookingHref}" class="btn btn-primary w-100">Book Now</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
   // Intercept Book Now to include price in query
   document.addEventListener('click', function(e){
     const btn = e.target.closest('.btn.btn-primary');
@@ -237,6 +179,11 @@
     const qs = new URLSearchParams({ destination: dest, price: String(price) }).toString();
     window.location.href = 'booking.html?' + qs;
   }
+
+  // Load packages when page loads
+  document.addEventListener('DOMContentLoaded', () => {
+    loadPackages();
+  });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

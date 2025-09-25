@@ -84,6 +84,10 @@ router.post("/signup", upload.single('profilePhoto'), async (req, res) => {
       profilePhoto = `/uploads/${req.file.filename}`;
     }
 
+    // Validate password policy: max 8, include letter, number, symbol
+    const passOk = /^(?=\S{1,8}$)(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).*$/.test(password);
+    if (!passOk) return res.status(400).json({ message: "Password must be max 8 chars and include letter, number, and symbol" });
+
     const newUser = new User({ 
       username, 
       password, 
@@ -182,6 +186,9 @@ router.post("/reset-password", async (req, res) => {
     return res.status(400).json({ message: "Email, token and new password are required" });
   }
   try {
+    const passOk = /^(?=\S{1,8}$)(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).*$/.test(password);
+    if (!passOk) return res.status(400).json({ message: "Password must be max 8 chars and include letter, number, and symbol" });
+
     const user = await User.findOne({ email, resetPasswordToken: token, resetPasswordExpires: { $gt: new Date() } });
     if (!user) return res.status(400).json({ message: "Invalid or expired token" });
 

@@ -5,14 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TrioBot Chat</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/theme.css">
   <style>
-    body { font-family: 'Segoe UI', Roboto, sans-serif; background:#f5f6fa; }
-    .page-header { background: linear-gradient(90deg, #0057b8, #00aaff); color:#fff; padding:80px 0 40px; margin-bottom:20px; }
-    .page-header h1 { font-weight:700; }
-    /* Make chat panel larger on this page and hide the launcher */
+    body { background: var(--bg); color: var(--text); }
+    .page-header { 
+      background: linear-gradient(135deg, var(--brand-900), var(--brand-800)); 
+      color: #fff; 
+      padding: 100px 0 60px; 
+      margin-bottom: 40px; 
+      border-bottom-left-radius: 20px; 
+      border-bottom-right-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+    .page-header h1 { font-weight: 700; letter-spacing: -0.5px; }
+    .page-header p { color: rgba(255,255,255,0.9); font-size: 1.1rem; }
+    
+    /* Chat panel styling */
     .tt-chat-launcher { display: none !important; }
-    .tt-chat-panel { right: auto !important; left: 50% !important; transform: translateX(-50%); width: 680px !important; max-height: calc(100vh - 220px) !important; }
-    @media (max-width: 768px){ .tt-chat-panel { left: 12px !important; right: 12px !important; transform:none; width:auto !important; } }
+    .tt-chat-panel { 
+      right: auto !important; 
+      left: 50% !important; 
+      transform: translateX(-50%); 
+      width: 720px !important; 
+      max-height: calc(100vh - 240px) !important;
+      border-radius: var(--radius) !important;
+      box-shadow: var(--shadow) !important;
+      border: 1px solid rgba(255,255,255,0.08) !important;
+    }
+    @media (max-width: 768px){ 
+      .tt-chat-panel { 
+        left: 16px !important; 
+        right: 16px !important; 
+        transform: none; 
+        width: auto !important; 
+        max-height: calc(100vh - 200px) !important;
+      } 
+    }
+    
+    .container { max-width: 800px; }
   </style>
   <script src="/js/auth.js"></script>
   <script src="/js/navbar.js"></script>
@@ -28,7 +58,9 @@
   </header>
 
   <main class="container">
-    <div class="text-center text-muted mb-3">The assistant will open automatically.</div>
+    <div class="text-center text-muted mb-4">
+      <small>Ask about destinations, packages, guides, bookings, or contact information.</small>
+    </div>
   </main>
 
   <script src="/js/chatbot.js"></script>

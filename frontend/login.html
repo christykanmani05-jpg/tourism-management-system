@@ -50,7 +50,12 @@
 
   <div class="form-group">
     <label>Password</label>
-    <input type="password" id="password" placeholder="Enter password" autocomplete="new-password">
+    <input type="password" id="password" placeholder="Enter password" autocomplete="new-password" maxlength="8">
+    <small class="text-muted">Max 8 chars, include letter, number, and symbol</small>
+    <div class="form-check mt-2">
+      <input class="form-check-input" type="checkbox" id="showPassword">
+      <label class="form-check-label" for="showPassword">Show password</label>
+    </div>
   </div>
 
   <div class="form-group" id="profile-photo-group" style="display: none;">
@@ -85,6 +90,15 @@ const profilePhotoGroup = document.getElementById("profile-photo-group");
 const profilePhotoInput = document.getElementById("profilePhoto");
 const imagePreview = document.getElementById("imagePreview");
 const previewImg = document.getElementById("previewImg");
+function isValidPassword(p){
+  // Max 8 chars, at least one letter, one digit, one symbol, no spaces
+  return /^(?=\S{1,8}$)(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).*$/.test(p);
+}
+// Toggle password visibility
+document.getElementById('showPassword').addEventListener('change', function(){
+  const pwd = document.getElementById('password');
+  pwd.type = this.checked ? 'text' : 'password';
+});
 
 // Prevent prefilled values
 document.addEventListener('DOMContentLoaded', function(){
@@ -160,6 +174,11 @@ submitBtn.addEventListener("click", async () => {
 
   if (!username || !password || (isSignup && !email)) {
     alert("Please fill in all required fields.");
+    return;
+  }
+
+  if (!isValidPassword(password)){
+    alert("Password must be max 8 chars and include letter, number, and symbol.");
     return;
   }
 

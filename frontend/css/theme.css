@@ -14,10 +14,15 @@ html,body{ background:var(--bg); color:var(--text); font-family: Inter, system-u
 
 .card, .highlight-card, .summary{ background:var(--surface)!important; border:1px solid rgba(255,255,255,0.08)!important; border-radius:var(--radius)!important; box-shadow:var(--shadow)!important; color:var(--text)!important; }
 
-.professional-navbar{ background:linear-gradient(135deg, var(--brand-900), var(--brand-800))!important; border-bottom:1px solid rgba(255,255,255,0.08)!important; }
+.professional-navbar{ background:transparent!important; border-bottom:1px solid transparent!important; backdrop-filter:saturate(120%) blur(8px); transition: background-color .25s ease, border-color .25s ease, box-shadow .25s ease; }
+.professional-navbar.navbar-scrolled{ background:linear-gradient(135deg, var(--brand-900), var(--brand-800))!important; border-bottom:1px solid rgba(255,255,255,0.08)!important; box-shadow:0 8px 24px rgba(0,0,0,0.18); }
 .professional-navbar .nav-link{ color:rgba(255,255,255,0.9)!important; }
 .professional-navbar .nav-link.active, .professional-navbar .nav-link:hover{ background:rgba(255,255,255,0.08)!important; color:#fff!important; border-radius:10px; }
 .brand-text{ color:#fff!important; font-weight:700; letter-spacing:-0.2px; }
+
+/* Subtle pop-in on load */
+@keyframes navPop { from{ opacity:0; transform: translateY(-8px);} to{ opacity:1; transform: translateY(0);} }
+.nav-pop{ animation: navPop .35s ease-out; }
 
 .rural-hero{ background-blend-mode: multiply; background-color: rgba(0,0,0,0.25); border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
 .filter-buttons .btn{ border-color: rgba(255,255,255,0.2); color:#cbd5e1; }
@@ -33,4 +38,5 @@ html,body{ background:var(--bg); color:var(--text); font-family: Inter, system-u
 /* Utilities */
 .section-title{ color:#fff; }
 .shadow-soft{ box-shadow:var(--shadow); }
+
 

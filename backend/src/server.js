@@ -10,6 +10,7 @@ const destinationRoutes = require("./routes/destinationRoutes");
 const ruralRoutes = require("./routes/ruralRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
+const packageRoutes = require("./routes/packageRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -63,5 +64,6 @@ app.use("/api", destinationRoutes);
 app.use("/api", ruralRoutes);
 app.use("/api", chatRoutes);
 app.use("/api", paymentRoutes);
+app.use("/api/packages", packageRoutes);
 
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));

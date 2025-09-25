@@ -5,9 +5,22 @@ async function loadNavbar() {
     const host = document.getElementById('navbar-host');
     if (host) {
       host.innerHTML = html;
+      // Ensure theme.css is present
+      if (!document.querySelector('link[href^="/css/theme.css"]')){
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/css/theme.css';
+        document.head.appendChild(link);
+      }
       // Update profile after navbar loads
       if (typeof updateProfileInNavbar === 'function') {
         setTimeout(updateProfileInNavbar, 50);
+      }
+      // Apply initial scrolled state
+      const nav = document.querySelector('.professional-navbar');
+      if (nav) {
+        if (window.scrollY > 10) nav.classList.add('navbar-scrolled');
+        else nav.classList.remove('navbar-scrolled');
       }
     }
   } catch (_) {
@@ -99,4 +112,14 @@ function updateProfileInNavbar() {
 }
 
 document.addEventListener('DOMContentLoaded', loadNavbar);
+
+// Add scroll behavior to toggle transparent vs solid navbar
+function applyNavbarScrolledState() {
+  const nav = document.querySelector('.professional-navbar');
+  if (!nav) return;
+  if (window.scrollY > 10) nav.classList.add('navbar-scrolled');
+  else nav.classList.remove('navbar-scrolled');
+}
+
+window.addEventListener('scroll', applyNavbarScrolledState);
 
