@@ -26,11 +26,14 @@ const frontendDir = path.resolve(__dirname, "../../frontend");
 app.use(express.static(frontendDir));
 app.use('/js', express.static(path.join(frontendDir, 'js')));
 
-// Serve uploaded files
-const uploadsDir = path.resolve(__dirname, "../uploads");
-app.use('/uploads', express.static(uploadsDir));
+// Serve uploaded files (support both legacy and current paths)
+const uploadsDirLegacy = path.resolve(__dirname, "../uploads"); // backend/uploads
+const uploadsDirCurrent = path.resolve(__dirname, "./uploads"); // backend/src/uploads
+app.use('/uploads', express.static(uploadsDirCurrent));
+app.use('/uploads', express.static(uploadsDirLegacy));
 console.log("Serving frontend from:", frontendDir);
-console.log("Serving uploads from:", uploadsDir);
+console.log("Serving uploads (current) from:", uploadsDirCurrent);
+console.log("Serving uploads (legacy) from:", uploadsDirLegacy);
 
 // Health check
 app.get("/api/health", (req, res) => {

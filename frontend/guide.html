@@ -30,6 +30,11 @@
         .error { color: #b91c1c; }
         .success { color: #065f46; }
         a { color: #2563eb; text-decoration: none; }
+        /* Hide navbar icons only on this page */
+        #navbar-host .brand-icon, 
+        #navbar-host .nav-link i,
+        #navbar-host .dropdown-item i,
+        #navbar-host .profile-dropdown i { display: none !important; }
     </style>
     <script>
         async function submitGuide(event) {
