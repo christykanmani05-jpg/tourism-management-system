@@ -128,6 +128,7 @@
 
   <p id="signupLink">Don't have an account? <a>Sign Up</a></p>
   <p id="loginLink" style="display:none;">Already have an account? <a>Login</a></p>
+  <p class="mt-2"><a id="forgotLink">Forgot Password?</a></p>
   
   <div class="text-center mt-3">
     <a href="/admin-login.html" class="text-decoration-none" style="color: #1a1a2e; font-size: 14px;">Admin Login</a>
@@ -140,6 +141,7 @@ const emailGroup = document.getElementById("email-group");
 const submitBtn = document.getElementById("submitBtn");
 const signupLink = document.getElementById("signupLink");
 const loginLink = document.getElementById("loginLink");
+const forgotLink = document.getElementById("forgotLink");
 
 const profilePhotoGroup = document.getElementById("profile-photo-group");
 const profilePhotoInput = document.getElementById("profilePhoto");
@@ -190,6 +192,23 @@ loginLink.addEventListener("click", () => {
   submitBtn.textContent = "Login";
   loginLink.style.display = "none";
   signupLink.style.display = "block";
+});
+
+// Simple demo forgot password handler (no backend reset implemented)
+forgotLink.addEventListener("click", async () => {
+  const email = prompt("Enter your registered email to reset password:");
+  if (!email || !email.trim()) return;
+  try {
+    const res = await fetch('/api/forgot-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email.trim() })
+    });
+    const data = await res.json();
+    alert(data.message || 'If an account exists, a reset link has been sent');
+  } catch (_) {
+    alert('Failed to request password reset.');
+  }
 });
 
 submitBtn.addEventListener("click", async () => {

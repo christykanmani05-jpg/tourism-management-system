@@ -7,6 +7,7 @@ const { sendMail } = require("../utils/mailer");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const crypto = require("crypto");
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -134,6 +135,64 @@ router.post("/login", async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Request password reset: creates token and emails link
+router.post("/forgot-password", async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ message: "Email is required" });
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      // Don't reveal user existence
+      return res.json({ message: "If an account exists, a reset link has been sent" });
+    }
+
+    const token = crypto.randomBytes(32).toString('hex');
+    const expires = new Date(Date.now() + 1000 * 60 * 30); // 30 minutes
+    user.resetPasswordToken = token;
+    user.resetPasswordExpires = expires;
+    await user.save();
+
+    const resetUrl = `${process.env.PUBLIC_BASE_URL || 'http://localhost:5001'}/reset-password.html?token=${token}&email=${encodeURIComponent(email)}`;
+    const fromAddress = process.env.MAIL_FROM || process.env.SMTP_USER || "no-reply@triotrails.com";
+
+    const mailOptions = {
+      from: fromAddress,
+      to: email,
+      subject: "Reset your TrioTrails password",
+      html: `<p>We received a request to reset your password.</p>
+             <p><a href="${resetUrl}">Click here to reset your password</a></p>
+             <p>If you didn't request this, you can ignore this email.</p>`
+    };
+
+    const { previewUrl } = await sendMail(mailOptions);
+    res.json({ message: "If an account exists, a reset link has been sent", ...(previewUrl ? { previewUrl } : {}) });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+// Reset password using token
+router.post("/reset-password", async (req, res) => {
+  const { email, token, password } = req.body;
+  if (!email || !token || !password) {
+    return res.status(400).json({ message: "Email, token and new password are required" });
+  }
+  try {
+    const user = await User.findOne({ email, resetPasswordToken: token, resetPasswordExpires: { $gt: new Date() } });
+    if (!user) return res.status(400).json({ message: "Invalid or expired token" });
+
+    user.password = password; // Note: for demo; ideally hash passwords
+    user.resetPasswordToken = null;
+    user.resetPasswordExpires = null;
+    await user.save();
+
+    res.json({ message: "Password has been reset successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 });
 
