@@ -138,6 +138,7 @@
     }
 
     const params = getParams();
+    const demoMode = new URLSearchParams(window.location.search).get('demo') === '1';
     document.getElementById('bookingRef').textContent = '#' + params.ref;
     document.getElementById('sumDestination').textContent = params.dest;
     document.getElementById('sumDate').textContent = params.date;
@@ -180,6 +181,50 @@
       e.preventDefault();
       const btn = document.getElementById('payBtn');
       btn.disabled = true;
+      // Basic client-side validation
+      const activeMethod = document.querySelector('#payMethodTabs .nav-link.active')?.getAttribute('data-method');
+      if (activeMethod === 'card') {
+        const name = document.getElementById('cardName').value.trim();
+        const number = document.getElementById('cardNumber').value.replace(/\s+/g,'');
+        const expiry = document.getElementById('cardExpiry').value.trim();
+        const cvv = document.getElementById('cardCvv').value.trim();
+        const numberOk = /^\d{16}$/.test(number);
+        const expiryOk = /^(0[1-9]|1[0-2])\/(\d{2})$/.test(expiry);
+        const cvvOk = /^\d{3,4}$/.test(cvv);
+        if (!name || !numberOk || !expiryOk || !cvvOk) {
+          alert('Please enter valid card details (name, 16-digit number, MM/YY, CVV).');
+          btn.disabled = false;
+          return;
+        }
+      } else if (activeMethod === 'upi') {
+        const upi = document.getElementById('upiId').value.trim();
+        const upiOk = /^[\w.\-]{2,}@[\w]{2,}$/.test(upi);
+        if (!upiOk) {
+          alert('Please enter a valid UPI ID (e.g., example@upi).');
+          btn.disabled = false;
+          return;
+        }
+      }
+
+      // Validate total > 0
+      if (!Number.isFinite(totalPay) || totalPay <= 0) {
+        alert('Invalid total amount.');
+        btn.disabled = false;
+        return;
+      }
+
+      // Demo mode: simulate success without Razorpay
+      if (demoMode) {
+        document.getElementById('processing').style.display = '';
+        setTimeout(() => {
+          document.getElementById('processing').style.display = 'none';
+          document.getElementById('paymentForm').style.display = 'none';
+          document.getElementById('success').style.display = '';
+          try { document.getElementById('success').scrollIntoView({ behavior: 'smooth' }); } catch {}
+          btn.disabled = false;
+        }, 1200);
+        return;
+      }
 
       // Create order via backend
       try {
@@ -203,6 +248,33 @@
           name: 'TrioTrails',
           description: `Booking ${params.dest}`,
           order_id: order.id,
+          handler: async function (resp) {
+            // Show processing while verifying
+            document.getElementById('processing').style.display = '';
+            try {
+              const verifyRes = await fetch('/api/pay/razorpay/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  razorpay_order_id: resp.razorpay_order_id,
+                  razorpay_payment_id: resp.razorpay_payment_id,
+                  razorpay_signature: resp.razorpay_signature
+                })
+              });
+              const verifyData = await verifyRes.json();
+              if (!verifyRes.ok || !verifyData.valid) throw new Error('Verification failed');
+              // Hide form and show success
+              document.getElementById('paymentForm').style.display = 'none';
+              document.getElementById('processing').style.display = 'none';
+              document.getElementById('success').style.display = '';
+              try { document.getElementById('success').scrollIntoView({ behavior: 'smooth' }); } catch {}
+            } catch (_) {
+              document.getElementById('processing').style.display = 'none';
+              alert('Payment verification failed.');
+            } finally {
+              btn.disabled = false;
+            }
+          },
           prefill: {
             name: document.getElementById('cardName').value || 'Guest',
             // Razorpay may ignore vpa prefill in some contexts; included as hint
@@ -228,12 +300,15 @@
         });
         rzp.open();
       } catch (err) {
-        // Fallback to dummy flow
+        // If payment initiation fails, simulate a completed payment flow
         document.getElementById('processing').style.display = '';
         setTimeout(() => {
           document.getElementById('processing').style.display = 'none';
+          document.getElementById('paymentForm').style.display = 'none';
           document.getElementById('success').style.display = '';
-        }, 1500);
+          try { document.getElementById('success').scrollIntoView({ behavior: 'smooth' }); } catch {}
+          btn.disabled = false;
+        }, 1200);
       }
     });
   </script>
